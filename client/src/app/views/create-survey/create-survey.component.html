@@ -1,0 +1,72 @@
+<h2>Create Survey</h2>
+
+<form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label for="batch" class="form-label">BATCH:</label>
+    <select class="form-select" id="batch" formControlName="batch">
+      <option value="">Select batch</option>
+      <option value="2022">2022</option>
+      <option value="2023">2023</option>
+      <option value="2024">2024</option>
+    </select>
+    <div *ngIf="surveyForm?.get('batch')?.hasError('required')" class="alert alert-danger">
+      batch is required.
+    </div>
+  </div>
+
+  <!-- <div class="mb-3">
+    <label for="description" class="form-label">Description:</label>
+    <textarea class="form-control" id="description" formControlName="description" rows="3" placeholder="Enter survey description"></textarea>
+    <div *ngIf="surveyForm?.get('description')?.hasError('required')" class="alert alert-danger">
+      Description is required.
+    </div>
+  </div> -->
+
+  <div class="mb-3">
+    <label for="semester" class="form-label">Semester:</label>
+    <select class="form-select" id="semester" formControlName="semester">
+      <option value="">Select Semester</option>
+      <option value="S1">Semester 1</option>
+      <option value="S2">S 2</option>
+    </select>
+    <div *ngIf="surveyForm?.get('semester')?.hasError('required')" class="alert alert-danger">
+      Semester is required.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="startDate" class="form-label">Start Date:</label>
+    <input type="date" class="form-control" id="startDate" formControlName="startDate" placeholder="Enter start date">
+    <div *ngIf="surveyForm?.get('startDate')?.hasError('required')" class="alert alert-danger">
+      Start Date is required.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="endDate" class="form-label">End Date:</label>
+    <input type="date" class="form-control" id="endDate" formControlName="endDate" placeholder="Enter end date">
+    <div *ngIf="surveyForm?.get('endDate')?.hasError('required')" class="alert alert-danger">
+      End Date is required.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="questions" class="form-label">Select Questions:</label>
+  
+    <div *ngFor="let question of questions">
+      <div class="question-item form-check">
+        <input type="checkbox" class="form-check-input" id="{{ question._id }}"
+               [value]="question._id" formControlName="questionIds"
+               [(ngModel)]="isChecked"
+               (change)="onQuestionSelectionChange(checkboxRef.checked, question._id)"
+               #checkboxRef>  <label class="form-check-label" for="{{ question._id }}">
+          {{ question.text }}
+        </label>
+      </div>
+    </div>
+    
+  </div>
+  
+
+  <button type="submit" class="btn btn-primary">Create Survey</button>
+</form>

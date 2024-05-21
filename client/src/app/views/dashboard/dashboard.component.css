@@ -1,0 +1,1 @@
+:host .legend small{font-size:x-small}.dropdown-menu{opacity:0;visibility:hidden;transition:opacity .3s ease,visibility 0s linear .3s}.dropdown-menu.show{opacity:1;visibility:visible;transition-delay:0s}

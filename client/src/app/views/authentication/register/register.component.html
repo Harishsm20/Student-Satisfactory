@@ -1,0 +1,167 @@
+<div class="bg-light dark:bg-transparent min-vh-100 d-flex flex-row align-items-center">
+  <c-container>
+    <c-row class="justify-content-center">
+      <c-col lg="7" md="9" xl="6">
+        <c-card class="mx-4">
+          <c-card-body class="p-4">
+            <form cForm [formGroup]="registrationForm">
+              <h1>Register</h1>
+              <p class="text-body-secondary">Create your account</p>
+
+              <c-row>
+                <c-col md="6" class="mb-3">
+                  <c-input-group>
+                    <span cInputGroupText>
+                      <svg cIcon name="cilUser"></svg>
+                    </span>
+                    <input autoComplete="name" cFormControl placeholder="Username" [formControlName]="'username'" />
+                  </c-input-group>
+                  <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
+                    <div *ngIf="username?.errors?.['required']">Username is required.</div>
+                    <div *ngIf="username?.errors?.['minlength']">Username must be at least 5 characters.</div>
+                    <div *ngIf="username?.errors?.['maxlength']">Username cannot be more than 20 characters.</div>
+                  </div>
+                </c-col>
+
+                <c-col md="6" class="mb-3">
+                  <c-input-group>
+                    <span cInputGroupText>&#64;</span>
+                    <input autoComplete="email" cFormControl placeholder="Email" [formControlName]="'email'" />
+                  </c-input-group>
+                  <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+                    <div *ngIf="email?.errors?.['required']">Email is required.</div>
+                    <div *ngIf="email?.errors?.['email']">Invalid email format.</div>
+                  </div>
+                </c-col>
+              </c-row>
+
+              <c-row>
+                <c-col md="6" class="mb-3">
+                  <c-input-group>
+                    <span cInputGroupText>
+                      <svg cIcon name="cilLockLocked"></svg>
+                    </span>
+                    <input autoComplete="new-password" cFormControl placeholder="Password" type="password" [formControlName]="'password'" />
+                  </c-input-group>
+                  <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+                    <div *ngIf="password?.errors?.['required']">Password is required.</div>
+                    <div *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters.</div>
+                    <div *ngIf="password?.errors?.['pattern']">Password must contain at least one number and one special character.</div>
+                  </div>
+                </c-col>
+
+                <c-col md="6" class="mb-3">
+                  <c-input-group>
+                    <span cInputGroupText>
+                      <svg cIcon name="cilLockLocked"></svg>
+                    </span>
+                    <input autoComplete="new-password" cFormControl placeholder="Repeat password" type="password" [formControlName]="'confirmPassword'" />
+                  </c-input-group>
+                  <div *ngIf="confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)">
+                    <div *ngIf="confirmPassword?.errors?.['required']">Confirm Password is required.</div>
+                    <div *ngIf="confirmPassword?.errors?.['minlength']">Confirm Password must be at least 6 characters.</div>
+                    <div *ngIf="password?.errors?.['pattern']">Password must contain at least one number and one special character.</div>
+                  </div>
+                </c-col>
+              </c-row>
+
+              <c-row>
+
+                <c-col md="6" class="mb-3">
+                  <c-input-group class="mb-3">
+                    <span cInputGroupText>
+                      <svg cIcon name="cil-bookmark"></svg>
+                    </span>
+                    <select class="form-control" [formControlName]="'department'"> <!-- Add 'form-control' class here -->
+                      <option value="" disabled selected style="color: rgba(0,0,0,0.5);">Select Department</option>
+                      <option value="department1">Department 1</option>
+                      <option value="department2">Department 2</option>
+                      <option value="department3">Department 3</option>
+                      <!-- Add more options as needed -->
+                    </select>
+                  </c-input-group>
+                </c-col>
+                
+
+                  <c-col md="6" class="mb-3">
+                    <c-input-group class="mb-3">
+                      <span cInputGroupText>
+                        <svg cIcon name="cil-people"></svg>
+                      </span>
+                      <select class="form-control" (change)="onRoleChange($event)" [formControlName]="'role'">
+                        <option value="" disabled selected style="color: rgba(0,0,0,0.5);">Select Role</option>
+                        <option value="student">Student</option>
+                        <option value="faculty">Faculty</option>
+                      </select>
+                    </c-input-group>
+                  </c-col>
+                
+              </c-row>
+                 <!-- Student input fields -->
+                 <div *ngIf="selectedRole === 'student'">
+                  <c-row>
+                    <c-col md="6" class="mb-3">
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText>
+                          <svg cIcon name="cil-pencil"></svg>
+                        </span>
+                        <input cFormControl placeholder="Register ID" type="text" [formControlName]="'RollNo'"/>
+                      </c-input-group>
+                      <div *ngIf="RollNo?.invalid && (RollNo?.dirty || RollNo?.touched)">
+                        <div *ngIf="RollNo?.errors?.['required']">Register ID is required.</div>
+                        <div *ngIf="RollNo?.errors?.['minlength']">Register ID must be at least 10 characters.</div>
+                        <div *ngIf="RollNo?.errors?.['maxlength']">Register ID size exceeded.</div>
+                        <div *ngIf="RollNo?.errors?.['alphanumeric']">Register ID cannot contain special characters.</div>
+                      </div>
+                    </c-col>
+                    <c-col md="6" class="mb-3">
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText>
+                          <svg cIcon name="cil-list"></svg>
+                        </span>
+                        <select class="form-control" [formControlName]="'batch'">
+                          <option value="" disabled selected style="color: rgba(0,0,0,0.5);">Select Batch</option>
+                          <option value="2020">2020</option>
+                          <option value="2021">2021</option>
+                          <option value="2021">2022</option>
+                          <option value="2021">2023</option>
+                        </select>
+                      </c-input-group>
+                    </c-col>
+                  </c-row>
+                </div>
+                
+                <!-- Faculty input fields -->
+                <div *ngIf="selectedRole === 'faculty'">
+                  <c-row>
+                    <c-col md="6" class="mb-3">
+                      <c-input-group class="mb-3">
+                        <span cInputGroupText>
+                          <svg cIcon name="cil-pencil"></svg>
+                        </span>
+                        <input cFormControl placeholder="Faculty ID" type="text" [formControlName]="'RollNo'"/>
+                      </c-input-group>
+                      <div *ngIf="RollNo?.invalid && (RollNo?.dirty || RollNo?.touched)">
+                        <div *ngIf="RollNo?.errors?.['required']">Faculty ID is required.</div>
+                        <div *ngIf="RollNo?.errors?.['minlength']">Faculty ID must be at least 10 characters.</div>
+                        <div *ngIf="RollNo?.errors?.['maxlength']">Faculty ID size exceeded.</div>
+                        <div *ngIf="RollNo?.errors?.['alphanumeric']">Faculty ID cannot contain special characters.</div>
+                      </div>
+                    </c-col>
+                  </c-row>
+                </div>
+
+              <div class="d-grid">
+                <button cButton color="success" (click)="onSubmit()">Create Account</button>
+              </div>
+              <div style="padding-top: 1em;">
+                <p>If you already have an account?</p>
+                <button cButton class="mt-3" color="success" (click)="toLoginPage()">Login</button>
+              </div>
+            </form>
+          </c-card-body>
+        </c-card>
+      </c-col>
+    </c-row>
+  </c-container>
+</div>

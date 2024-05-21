@@ -1,0 +1,105 @@
+
+<div class="dropdown mb-3" style="width: 50%;">
+  <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" aria-haspopup="true" aria-expanded="false" style="width: 15%;" (click)="toggleCollapse()">
+    Filter
+  </button>
+  <div [visible]="visible" cCollapse class="dropdown-menu" id="dropdownMenu" aria-labelledby="filterDropdown" style="width: 75%; padding: 1em;">
+    <!-- Filters Selections -->
+    <div class="form-group" style="margin-bottom: 10px;">
+      <label for="batchFilter">Batch:</label>
+      <select id="batchFilter" class="form-control">
+        <option value="" disabled selected>Select the Batch</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+        <option value="2022">2022</option>
+        <option value="2023">2023</option>
+        <!-- Add more batch options as needed -->
+      </select>
+    </div>
+  
+    <div class="form-group" style="margin-bottom: 10px;">
+      <label for="semesterFilter">Semester:</label>
+      <select id="semesterFilter" class="form-control">
+        <option value="" disabled selected>Select the Semester</option>
+        <option value="1">Semester 1</option>
+        <option value="2">Semester 2</option>
+        <option value="3">Semester 3</option>
+        <option value="4">Semester 4</option>
+        <option value="5">Semester 5</option>
+        <option value="6">Semester 6</option>
+        <option value="7">Semester 7</option>
+        <option value="8">Semester 8</option>
+        <!-- Add more semester options as needed -->
+      </select>
+    </div>
+  
+    <div class="form-group" style="margin-bottom: 10px;">
+      <label for="questionFilter">Questions:</label>
+      <select id="questionFilter" class="form-control">
+        <option value="" disabled selected>Select the Question</option>
+        <option value="1">Question 1</option>
+        <option value="2">Question 2</option>
+        <option value="3">Question 3</option>
+        <option value="4">Question 4</option>
+        <option value="5">Question 5</option>
+        <option value="6">Question 6</option>
+        <option value="7">Question 7</option>
+        <option value="8">Question 8</option>
+        <option value="9">Question 9</option>
+        <option value="10">Question 10</option>
+        <option value="11">Question 11</option>
+        <option value="12">Question 12</option>
+        <option value="13">Question 13</option>
+        <option value="14">Question 14</option>
+        <option value="15">Question 15</option>
+        <!-- Add more question options as needed -->
+      </select>
+    </div>
+  
+    <!-- Apply Filters Button -->
+    <button class="btn btn-primary">Apply Filters</button>
+  </div>     
+</div>
+
+
+  
+
+
+    <!-- <div class="form-group">
+      <label for="batchFilter">Batch:</label>
+      <select id="batchFilter" class="form-control">
+        <option *ngFor="let batch of batches" [value]="batch">{{ batch }}</option>
+      </select>
+    </div>
+
+
+    <div class="form-group">
+      <label for="semesterFilter">Semester:</label>
+      <select id="semesterFilter" class="form-control">
+        <option *ngFor="let semester of semesters" [value]="semester">{{ semester }}</option>
+      </select>
+    </div>
+
+
+    <div class="form-group">
+      <label for="questionFilter">Questions:</label>
+      <select id="questionFilter" class="form-control">
+        <option *ngFor="let question of questions" [value]="question">{{ question }}</option>
+      </select>
+    </div> -->
+  
+
+
+
+
+
+<c-col xs="24" lg="10">
+<c-card class="mb-4">
+<c-card-header>
+  Student Survey
+</c-card-header>
+<c-card-body>
+  <c-chart type="bar" [data]="chartBarData" [options]="options" />
+</c-card-body>
+</c-card>
+</c-col>
