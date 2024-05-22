@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,NgModel } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,NgModel, FormArray } from '@angular/forms';
 import { SurveyService } from '../../service/survey.service'; // Import SurveyService
 import { CommonModule } from '@angular/common';
 import { HttpClientModule} from '@angular/common/http';
@@ -9,6 +9,8 @@ interface Question {
   _id: string|undefined;
   text: string;
   options: { text: string }[]; // Array of objects with text property
+  isSelected?: boolean;
+
 }
 
 @Component({
@@ -24,7 +26,6 @@ export class CreateSurveyComponent implements OnInit {
   questions: Question[] = []; // Array to store available questions
   selectedQuestionIds: string[] = []; // Array to store selected question IDs
   isChecked = false;
-
 
   constructor(
     private fb: FormBuilder, // Inject FormBuilder for creating form
@@ -67,24 +68,35 @@ export class CreateSurveyComponent implements OnInit {
 
       this.surveyService.createSurvey(surveyData).subscribe(response => {
         console.log('Survey created successfully!', response);
-        // Optionally, clear the form and selected questions after successful creation
       }, error => {
         console.error('Error creating survey:', error);
       });
     } else {
+      alert('Please fill in all required fields and select at least one question.');
       console.error('Please fill in all required fields and select at least one question.');
-      // Optionally, display an error message in the UI
     }
   }
 
-  onQuestionSelectionChange(Checked: boolean, questionId: string="")  {
-    if (Checked) {
-      this.selectedQuestionIds.push(questionId);
-    } else {
-      const index = this.selectedQuestionIds.indexOf(questionId);
-      if (index !== -1) {
-        this.selectedQuestionIds.splice(index, 1);
+  onQuestionSelectionChange(questionId: string="") {
+    const questionIndex = this.questions.findIndex(question => question._id === questionId);
+    if (questionIndex !== -1) {
+      this.questions[questionIndex].isSelected = !this.questions[questionIndex].isSelected;
+
+      if (this.questions[questionIndex].isSelected) {
+        this.selectedQuestionIds.push(questionId);
+      } else {
+        const index = this.selectedQuestionIds.indexOf(questionId);
+        if (index !== -1) {
+          this.selectedQuestionIds.splice(index, 1);
+        }
       }
     }
-  }
+
+    // if(this.selectedQuestionIds.length>0){
+    //   console.table(this.selectedQuestionIds);
+    // }
+    // else{
+    //   console.log("Empty array");
+    // }
+  } 
 }

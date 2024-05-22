@@ -27,7 +27,13 @@
     <select class="form-select" id="semester" formControlName="semester">
       <option value="">Select Semester</option>
       <option value="S1">Semester 1</option>
-      <option value="S2">S 2</option>
+      <option value="S2">Semester 2</option>
+      <option value="S3">Semester 3</option>
+      <option value="S4">Semester 4</option>
+      <option value="S5">Semester 5</option>
+      <option value="S6">Semester 6</option>
+      <option value="S7">Semester 7</option>
+      <option value="S8">Semester 8</option>
     </select>
     <div *ngIf="surveyForm?.get('semester')?.hasError('required')" class="alert alert-danger">
       Semester is required.
@@ -53,17 +59,16 @@
   <div class="mb-3">
     <label for="questions" class="form-label">Select Questions:</label>
   
-    <div *ngFor="let question of questions">
+    <div *ngFor="let question of questions;">
       <div class="question-item form-check">
         <input type="checkbox" class="form-check-input" id="{{ question._id }}"
-               [value]="question._id" formControlName="questionIds"
-               [(ngModel)]="isChecked"
-               (change)="onQuestionSelectionChange(checkboxRef.checked, question._id)"
-               #checkboxRef>  <label class="form-check-label" for="{{ question._id }}">
+               [value]="question._id"
+               (change)="onQuestionSelectionChange(question?._id)">  <label class="form-check-label" for="{{ question?._id }}">
           {{ question.text }}
         </label>
       </div>
     </div>
+    
     
   </div>
   

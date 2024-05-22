@@ -4,14 +4,16 @@ const User = require('../models/users.js'); // Import the User model from users.
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
+  let role = '';
   console.log("Login body:", req.body);
   const { email, password } = req.body;
   User.findOne({ email: email })
     .then(user => {
       if (user) {
         if (user.password === password) {
+          role = user.role;
           res.json("Success");
-          console.log("Login Success");
+          console.log(`Login Success : ${role}`);
         } else {
           res.json("Password is incorrect");
           console.log("Login Failed");

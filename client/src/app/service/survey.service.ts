@@ -12,15 +12,14 @@ interface Survey {
   startDate: Date;
   endDate: Date;
   faculty: any;
-  // Update questions property to match backend schema
-  questions: Question[]; // Array of Question objects
+  questions: Question[]; 
 }
 
 // Define the Question interface for clarity (replace with your actual structure)
 interface Question {
-  _id?: string; // Optional if questions already have IDs
+  _id?: string; 
   text: string;
-  options: { text: string }[]; // Array of objects with text property
+  options: { text: string }[]; 
 }
 
 @Injectable({
@@ -47,12 +46,12 @@ export class SurveyService {
   getQuestions(): Observable<Question[]> {
     return this.http.get<Question[]>(`${this.baseUrl}/questions/getquestions`); // Update endpoint for questions
   }
-
+ 
   createSurvey(surveyData: Survey[]): Observable<Survey> {
     console.log('Survey Data Type:', typeof surveyData); // Check the type
     console.table(surveyData);
     
-    return this.http.post<Survey>(`${this.baseUrl}/surveys/create`, surveyData);
+    return this.http.post<Survey>(`${this.baseUrl}/surveys/createSurvey`, surveyData);
   }
   
 }
