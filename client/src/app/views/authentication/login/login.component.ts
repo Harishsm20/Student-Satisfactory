@@ -43,8 +43,11 @@ export class LoginComponent {
       .subscribe({
         next: (response) => {
           if(response == "Success"){
-          console.log("Login successful:", response);
-          this.router.navigate(['/dashboard']);}
+            const token = response['token']; 
+            localStorage.setItem('token', token);
+            console.log("Login successful:", response);
+            this.router.navigate(['/dashboard']);
+          }
         },
         error: (error) => {
           console.error("Login error:", error);
