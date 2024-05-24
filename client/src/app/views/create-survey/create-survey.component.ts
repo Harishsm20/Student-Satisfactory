@@ -4,6 +4,9 @@ import { SurveyService } from '../../service/survey.service'; // Import SurveySe
 import { CommonModule } from '@angular/common';
 import { HttpClientModule} from '@angular/common/http';
 import { JwtService } from '../../service/jwt.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
+
+
 
 // Update Question interface to match backend schema
 interface Question {
@@ -20,20 +23,30 @@ interface Question {
   styleUrls: ['./create-survey.component.scss'],
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
-  providers: [SurveyService] // Import ReactiveFormsModule here
+  providers: [JwtHelperService,SurveyService] 
 })
 export class CreateSurveyComponent implements OnInit {
+  decodeJwtToken(token: string): any {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace('-', '+').replace(/_/g, '/');
+    const decodedPayload = atob(base64);
+    return JSON.parse(decodedPayload);
+  }
+  userRole: string = '';
+
   surveyForm: FormGroup = new FormGroup({});
   questions: Question[] = []; // Array to store available questions
   selectedQuestionIds: string[] = []; // Array to store selected question IDs
   isChecked = false;
 
   constructor(
-    private fb: FormBuilder, // Inject FormBuilder for creating form
-    private surveyService: SurveyService // Inject SurveyService
+    private fb: FormBuilder, 
+    private surveyService: SurveyService ,
+    private jwtService: JwtService 
   ) { }
 
   ngOnInit(): void {
+    // this.userRole = this.jwtService.getRole()
     this.createForm();
     this.fetchAvailableQuestions();
   }
@@ -79,6 +92,7 @@ export class CreateSurveyComponent implements OnInit {
   }
 
   onQuestionSelectionChange(questionId: string="") {
+    console.log(this.userRole);
     const questionIndex = this.questions.findIndex(question => question._id === questionId);
     if (questionIndex !== -1) {
       this.questions[questionIndex].isSelected = !this.questions[questionIndex].isSelected;

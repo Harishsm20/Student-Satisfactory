@@ -38,7 +38,7 @@ router.post('/createSurvey', async (req, res) => {
       semester,
       startDate,
       endDate,
-      // faculty: faculty._id,
+      faculty: faculty._id,
       questions: [], // Initially empty, questions added later
     });
     await newSurvey.save();

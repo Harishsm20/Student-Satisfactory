@@ -1,5 +1,8 @@
 const express = require('express');
 const User = require('../models/users.js'); // Import the User model from users.js
+const crypto = require('crypto');
+const secretKey = require('crypto').randomBytes(32).toString('hex'); // Use environment variables for the secret key
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -12,8 +15,15 @@ router.post('/login', async (req, res) => {
       if (user) {
         if (user.password === password) {
           role = user.role;
-          res.json("Success");
           console.log(`Login Success : ${role}`);
+          const token = jwt.sign({ userId: user._id, role: user.role }, secretKey, { expiresIn: '1h' }); 
+          console.log(token);
+          return res.json({
+            success: true, // Indicate successful login
+            message: 'Authentication successful', // Optional message
+            token, // Include the token
+          }); // Send token and success message in the response
+        
         } else {
           res.json("Password is incorrect");
           console.log("Login Failed");

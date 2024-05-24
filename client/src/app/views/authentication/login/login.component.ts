@@ -42,11 +42,19 @@ export class LoginComponent {
     this.registerService.login(requestBody)
       .subscribe({
         next: (response) => {
-          if(response == "Success"){
-            const token = response['token']; 
-            localStorage.setItem('token', token);
-            console.log("Login successful:", response);
-            this.router.navigate(['/dashboard']);
+          if (typeof response === 'string') {
+            console.error("Unexpected response format:", response);
+          } else {
+            const token = response?.token; 
+            if (token) { // Check if token exists before storing
+              localStorage.setItem('token', token);
+              console.log("Login successful:", response);
+              this.router.navigate(['/dashboard']);
+            } else {
+              // Handle missing token in response
+              console.error("Missing token in response:", response);
+              // Display user-friendly error message
+            }
           }
         },
         error: (error) => {
@@ -55,3 +63,4 @@ export class LoginComponent {
       });
   }
 }
+  
