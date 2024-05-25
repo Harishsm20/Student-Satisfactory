@@ -15,45 +15,9 @@ export class JwtService {
   public getRole(): string {
     const token = localStorage.getItem('token');
     if (token) {
-      try {
-        const decodedToken = this.jwtHelper.decodeToken(token);
-        return decodedToken.role;
-      } catch (error) {
-        console.error('Error decoding JWT token:', error);
-        return ''; 
-      }
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return decodedToken?.role || '';
     }
     return '';
   }
 }
-
-// import { Injectable } from '@angular/core';
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class JwtService {
-//   public isAuthenticated(): boolean {
-//     const token = localStorage.getItem('token');
-//     return token != null; // Check for token existence
-//   }
-
-//   public getRoleFromToken(token: string): string | null {
-//     if (!token) {
-//       return null;
-//     }
-//     try {
-//       const decodedToken = JSON.parse(atob(token.split('.')[1]));
-//       return decodedToken.role; // Assuming "role" is the property name
-//     } catch (error) {
-//       console.error('Error decoding JWT token:', error);
-//       return null;
-//     }
-//   }
-
-//   public getRole(): string {
-//     const token = localStorage.getItem('token');
-//     return this.getRoleFromToken(token);
-//   }
-// }
-

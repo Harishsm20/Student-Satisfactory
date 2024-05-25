@@ -1,20 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,NgModel, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { SurveyService } from '../../service/survey.service'; // Import SurveyService
 import { CommonModule } from '@angular/common';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { JwtService } from '../../service/jwt.service';
-import { JwtHelperService } from '@auth0/angular-jwt';
-
-
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 // Update Question interface to match backend schema
 interface Question {
-  _id: string|undefined;
+  _id: string | undefined;
   text: string;
   options: { text: string }[]; // Array of objects with text property
   isSelected?: boolean;
-
 }
 
 @Component({
@@ -23,15 +20,13 @@ interface Question {
   styleUrls: ['./create-survey.component.scss'],
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
-  providers: [JwtHelperService,SurveyService] 
+  providers: [
+    SurveyService,
+    { provide: JWT_OPTIONS, useValue: {} },
+    JwtHelperService, JwtService
+  ]
 })
 export class CreateSurveyComponent implements OnInit {
-  decodeJwtToken(token: string): any {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace('-', '+').replace(/_/g, '/');
-    const decodedPayload = atob(base64);
-    return JSON.parse(decodedPayload);
-  }
   userRole: string = '';
 
   surveyForm: FormGroup = new FormGroup({});
@@ -40,13 +35,13 @@ export class CreateSurveyComponent implements OnInit {
   isChecked = false;
 
   constructor(
-    private fb: FormBuilder, 
-    private surveyService: SurveyService ,
-    private jwtService: JwtService 
+    private fb: FormBuilder,
+    private surveyService: SurveyService,
+    private jwtService: JwtService // Inject JwtService
   ) { }
 
   ngOnInit(): void {
-    // this.userRole = this.jwtService.getRole()
+    this.userRole = this.jwtService.getRole(); // Use JwtService to get role from token
     this.createForm();
     this.fetchAvailableQuestions();
   }
@@ -91,7 +86,7 @@ export class CreateSurveyComponent implements OnInit {
     }
   }
 
-  onQuestionSelectionChange(questionId: string="") {
+  onQuestionSelectionChange(questionId: string = "") {
     console.log(this.userRole);
     const questionIndex = this.questions.findIndex(question => question._id === questionId);
     if (questionIndex !== -1) {
@@ -106,12 +101,11 @@ export class CreateSurveyComponent implements OnInit {
         }
       }
     }
-
-    // if(this.selectedQuestionIds.length>0){
+     // if(this.selectedQuestionIds.length>0){
     //   console.table(this.selectedQuestionIds);
     // }
     // else{
     //   console.log("Empty array");
     // }
-  } 
+  }
 }
