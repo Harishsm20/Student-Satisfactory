@@ -4,11 +4,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root', // Assuming it's a global service
+  providedIn: 'root', 
 })
 export class RegisterService {
 
-  private baseUrl = 'http://localhost:3001/auth'; // Assuming your server is running on port 3001
+  private baseUrl = 'http://localhost:3001/auth'; 
 
   constructor(private http: HttpClient) { }
 

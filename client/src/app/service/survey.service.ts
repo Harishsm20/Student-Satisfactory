@@ -31,24 +31,23 @@ export class SurveyService {
   constructor(private http: HttpClient) { }
 
   getSurveyById(surveyId: string): Observable<Survey> {
-    return this.http.get<Survey>(`${this.baseUrl}/surveys/${surveyId}`); // Specify expected return type
+    return this.http.get<Survey>(`${this.baseUrl}/surveys/${surveyId}`); 
   }
 
-  // Add a new method to get all active surveys with their questions
   getFilteredSurveys(filter?: { semester?: string }): Observable<Survey[]> {
     let url = `${this.baseUrl}/surveys/active`;
     if (filter && filter.semester) {
       url += `?semester=${filter.semester}`;
     }
-    return this.http.get<Survey[]>(url); // Specify the expected return type as an array of Survey objects
+    return this.http.get<Survey[]>(url); 
   }
 
   getQuestions(): Observable<Question[]> {
-    return this.http.get<Question[]>(`${this.baseUrl}/questions/getquestions`); // Update endpoint for questions
+    return this.http.get<Question[]>(`${this.baseUrl}/questions/getquestions`); 
   }
  
   createSurvey(surveyData: Survey[]): Observable<Survey> {
-    console.log('Survey Data Type:', typeof surveyData); // Check the type
+    console.log('Survey Data Type:', typeof surveyData); 
     console.table(surveyData);
     
     return this.http.post<Survey>(`${this.baseUrl}/surveys/createSurvey`, surveyData);

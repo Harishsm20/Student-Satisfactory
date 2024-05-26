@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { SurveyService } from '../../service/survey.service'; // Import SurveyService
+import { SurveyService } from '../../service/survey.service'; 
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtService } from '../../service/jwt.service';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
-// Update Question interface to match backend schema
 interface Question {
   _id: string | undefined;
   text: string;
-  options: { text: string }[]; // Array of objects with text property
+  options: { text: string }[]; 
   isSelected?: boolean;
 }
 
@@ -30,18 +29,18 @@ export class CreateSurveyComponent implements OnInit {
   userRole: string = '';
 
   surveyForm: FormGroup = new FormGroup({});
-  questions: Question[] = []; // Array to store available questions
-  selectedQuestionIds: string[] = []; // Array to store selected question IDs
+  questions: Question[] = []; 
+  selectedQuestionIds: string[] = [];
   isChecked = false;
 
   constructor(
     private fb: FormBuilder,
     private surveyService: SurveyService,
-    private jwtService: JwtService // Inject JwtService
+    private jwtService: JwtService 
   ) { }
 
   ngOnInit(): void {
-    this.userRole = this.jwtService.getRole(); // Use JwtService to get role from token
+    this.userRole = this.jwtService.getRole(); 
     this.createForm();
     this.fetchAvailableQuestions();
   }
@@ -49,11 +48,10 @@ export class CreateSurveyComponent implements OnInit {
   createForm() {
     this.surveyForm = this.fb.group({
       batch: ['', Validators.required],
-      // description: ['', Validators.required],  // Uncomment if description is required
       semester: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      questionIds: [[]] // Array to store selected question IDs
+      questionIds: [[]] 
     });
   }
 
@@ -68,7 +66,7 @@ export class CreateSurveyComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.surveyForm.valid && this.selectedQuestionIds.length > 0) { // Ensure some questions are selected
+    if (this.surveyForm.valid && this.selectedQuestionIds.length > 0) { 
       const formValue = this.surveyForm.value;
       const surveyData = {
         ...formValue,

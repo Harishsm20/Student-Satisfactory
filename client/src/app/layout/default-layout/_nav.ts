@@ -1,6 +1,6 @@
 import { INavData } from '@coreui/angular';
 
-export const navItems: INavData[] = [
+export const navItems: (INavData & { roles?: string[] })[] = [
   {
     name: 'Student Survey',
     url: '/dashboard',
@@ -8,11 +8,13 @@ export const navItems: INavData[] = [
     badge: {
       color: 'info',
       text: 'NEW'
-    }
+    },
+    roles: ['faculty']
   },
   {
     title: true,
-    name: 'Theme'
+    name: 'Theme',
+    roles: ['faculty']
   },
   {
     name: 'Questions',
@@ -21,7 +23,8 @@ export const navItems: INavData[] = [
     badge: {
       color: 'info',
       text: 'NEW'
-    }
+    },
+    roles: ['student','faculty']
   },
   {
     name: 'Create-Survey',
@@ -30,6 +33,7 @@ export const navItems: INavData[] = [
     badge: {
       color: 'info',
       text: 'NEW'
-    }
+    },
+    roles: ['faculty']
   },
 ];

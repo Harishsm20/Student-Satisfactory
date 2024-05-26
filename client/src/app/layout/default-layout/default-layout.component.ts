@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { NgScrollbar } from 'ngx-scrollbar';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+
 
 import { IconDirective } from '@coreui/icons-angular';
 import {
@@ -16,14 +18,9 @@ import {
 } from '@coreui/angular';
 
 import { DefaultFooterComponent, DefaultHeaderComponent } from './';
+import { INavData } from '@coreui/angular';
 import { navItems } from './_nav';
-
-function isOverflown(element: HTMLElement) {
-  return (
-    element.scrollHeight > element.clientHeight ||
-    element.scrollWidth > element.clientWidth
-  );
-}
+import { JwtService } from '../../service/jwt.service'; // Adjust the path as needed
 
 @Component({
   selector: 'app-dashboard',
@@ -46,14 +43,30 @@ function isOverflown(element: HTMLElement) {
     ContainerComponent,
     RouterOutlet,
     DefaultFooterComponent
-  ]
+  ],
+  providers: [    { provide: JWT_OPTIONS, useValue: {} },
+    JwtHelperService, JwtService]
 })
-export class DefaultLayoutComponent {
-  public navItems = navItems;
+export class DefaultLayoutComponent implements OnInit {
+  public navItems: (INavData & { roles?: string[] })[] = [];
+
+  constructor(private jwtService: JwtService) {}
+
+  ngOnInit(): void {
+    const userRole = this.jwtService.getRole();
+    this.navItems = this.filterNavItems(navItems, userRole);
+  }
+
+  private filterNavItems(navItems: (INavData & { roles?: string[] })[], role: string): (INavData & { roles?: string[] })[] {
+    return navItems.filter(item => {
+      if (item.roles) {
+        return item.roles.includes(role);
+      }
+      return true; // If no roles are defined, include the item by default
+    });
+  }
 
   onScrollbarUpdate($event: any) {
-    // if ($event.verticalUsed) {
-    // console.log('verticalUsed', $event.verticalUsed);
-    // }
+    // Handle scrollbar update if needed
   }
 }
