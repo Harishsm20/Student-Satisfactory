@@ -9,14 +9,18 @@ const app = express();
 const authController = require('./controllers/authController'); // Import auth controller
 const surveyController = require('./controllers/surveyController');
 const questionController = require('./controllers/questionController');
+const dotenv = require('dotenv');
+
 
 
 const PORT = 3001;
+dotenv.config();
 
 // Connect to MongoDB
 const connect = async () => {
   try {
-    await mongoose.connect('mongodb+srv://Harish:IpcoahXz8yD2IibT@cluster0.p3yw9uj.mongodb.net/SSS', {
+      await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.p3yw9uj.mongodb.net/${process.env.DB_NAME}`, {
+
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

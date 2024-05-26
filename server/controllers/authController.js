@@ -1,7 +1,7 @@
 const express = require('express');
-const User = require('../models/users.js'); // Import the User model from users.js
+const User = require('../models/users.js');
 const crypto = require('crypto');
-const secretKey = require('crypto').randomBytes(32).toString('hex'); // Use environment variables for the secret key
+const secretKey = require('crypto').randomBytes(32).toString('hex'); 
 const jwt = require('jsonwebtoken');
 
 const router = express.Router();
@@ -19,10 +19,10 @@ router.post('/login', async (req, res) => {
           const token = jwt.sign({ userId: user._id, role: user.role }, secretKey, { expiresIn: '1h' }); 
           console.log(token);
           return res.json({
-            success: true, // Indicate successful login
-            message: 'Authentication successful', // Optional message
-            token, // Include the token
-          }); // Send token and success message in the response
+            success: true, 
+            message: 'Authentication successful',
+            token, 
+          }); 
         
         } else {
           res.json("Password is incorrect");
@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
 router.post('/register', async (req, res) => {
   console.log("Received request body:", req.body);
 
-  // Destructure fields from request body
+
   const { username, email, password, role, department, RollNo, batch } = req.body;
   console.log(`USERNAME : ${username}`);
   console.log(`EMAIL : ${email}`);
@@ -48,13 +48,11 @@ router.post('/register', async (req, res) => {
   console.log(`Roll No : ${RollNo}`);
   console.log(`Batch : ${batch}`);
 
-  // Validate required fields
   if (!email || !password || !role || !RollNo) {
     return res.status(400).json({ error: 'Username, email, password, roles, department and RollNo are required fields.' });
   }
 
   try {
-    // Create a new user instance
     const newUser = new User({
       username,
       email,
@@ -62,7 +60,7 @@ router.post('/register', async (req, res) => {
       role,
       department,
       RollNo,
-      batch, // Assuming batch is optional
+      batch, 
     });
 
     // Log the new user data before saving
