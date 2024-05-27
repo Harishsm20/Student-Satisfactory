@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtService } from '../../service/jwt.service';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { User } from '../authentication/shared/user.model';
 
 interface Question {
   _id: string | undefined;
@@ -27,9 +28,9 @@ interface Question {
 })
 export class CreateSurveyComponent implements OnInit {
   userRole: string = '';
-
+  faculty: string ='';
   surveyForm: FormGroup = new FormGroup({});
-  questions: Question[] = []; 
+  questionsB: Question[] = []; 
   selectedQuestionIds: string[] = [];
   isChecked = false;
 
@@ -41,6 +42,7 @@ export class CreateSurveyComponent implements OnInit {
 
   ngOnInit(): void {
     this.userRole = this.jwtService.getRole(); 
+    this.faculty = this.jwtService.getId();
     this.createForm();
     this.fetchAvailableQuestions();
   }
@@ -51,13 +53,14 @@ export class CreateSurveyComponent implements OnInit {
       semester: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      questionIds: [[]] 
+      questions: [[]] ,
+
     });
   }
 
   fetchAvailableQuestions() {
     this.surveyService.getQuestions().subscribe(questions => {
-      this.questions = questions.map(question => ({
+      this.questionsB = questions.map(question => ({
         _id: question._id,
         text: question.text,
         options: question.options
@@ -66,10 +69,11 @@ export class CreateSurveyComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.surveyForm.valid && this.selectedQuestionIds.length > 0) { 
+    if (this.surveyForm.valid && this.selectedQuestionIds.length > 0 && this.userRole == "faculty") { 
       const formValue = this.surveyForm.value;
       const surveyData = {
         ...formValue,
+        faculty:this.faculty,
         questions: this.selectedQuestionIds
       };
 
@@ -86,11 +90,11 @@ export class CreateSurveyComponent implements OnInit {
 
   onQuestionSelectionChange(questionId: string = "") {
     console.log(this.userRole);
-    const questionIndex = this.questions.findIndex(question => question._id === questionId);
+    const questionIndex = this.questionsB.findIndex(question => question._id === questionId);
     if (questionIndex !== -1) {
-      this.questions[questionIndex].isSelected = !this.questions[questionIndex].isSelected;
+      this.questionsB[questionIndex].isSelected = !this.questionsB[questionIndex].isSelected;
 
-      if (this.questions[questionIndex].isSelected) {
+      if (this.questionsB[questionIndex].isSelected) {
         this.selectedQuestionIds.push(questionId);
       } else {
         const index = this.selectedQuestionIds.indexOf(questionId);

@@ -61,7 +61,7 @@
   <div class="mb-3">
     <label for="questions" class="form-label">Select Questions:</label>
   
-    <div *ngFor="let question of questions;">
+    <div *ngFor="let question of questionsB;">
       <div class="question-item form-check">
         <input type="checkbox" class="form-check-input" id="{{ question._id }}"
                [value]="question._id"

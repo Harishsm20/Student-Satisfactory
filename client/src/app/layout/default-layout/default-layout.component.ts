@@ -3,7 +3,6 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
-
 import { IconDirective } from '@coreui/icons-angular';
 import {
   ContainerComponent,
@@ -20,7 +19,7 @@ import {
 import { DefaultFooterComponent, DefaultHeaderComponent } from './';
 import { INavData } from '@coreui/angular';
 import { navItems } from './_nav';
-import { JwtService } from '../../service/jwt.service'; // Adjust the path as needed
+import { JwtService } from '../../service/jwt.service'; 
 
 @Component({
   selector: 'app-dashboard',
@@ -62,11 +61,8 @@ export class DefaultLayoutComponent implements OnInit {
       if (item.roles) {
         return item.roles.includes(role);
       }
-      return true; // If no roles are defined, include the item by default
+      return true;
     });
   }
 
-  onScrollbarUpdate($event: any) {
-    // Handle scrollbar update if needed
-  }
 }

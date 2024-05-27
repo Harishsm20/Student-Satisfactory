@@ -16,7 +16,7 @@ router.post('/login', async (req, res) => {
         if (user.password === password) {
           role = user.role;
           console.log(`Login Success : ${role}`);
-          const token = jwt.sign({ userId: user._id, role: user.role }, secretKey, { expiresIn: '1h' }); 
+          const token = jwt.sign({ userId: user._id, role: user.role,  faculty: user.RollNo }, secretKey, { expiresIn: '1h' }); 
           console.log(token);
           return res.json({
             success: true, 

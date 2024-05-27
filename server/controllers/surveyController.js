@@ -25,28 +25,23 @@ const addQuestionsToSurvey = async (surveyId, questionIds) => {
 // Create a survey (faculty only)
 router.post('/createSurvey', async (req, res) => {
   console.log(`REQUEST BODY: ${JSON.stringify(req.body, null, 2)}`);
-  const faculty = req.user; // Assuming user data is available from JWT
-  const { title, description, semester, startDate, endDate, questionIds } = req.body;
+  const { batch, semester, startDate, endDate, questions, faculty } = req.body;
   try {
-    // if (!faculty || faculty.role !== 'faculty') {
-    //   console.log("Only faculties can create this");
-    //   return res.status(401).send({ message: 'Unauthorized! Only faculty can create surveys.' });
-    // }
     const newSurvey = new Survey({
-      title,
-      description,
+      batch,
       semester,
       startDate,
       endDate,
-      faculty: faculty._id,
-      questions: [], // Initially empty, questions added later
+      faculty,
+      questions,
     });
+    console.log(newSurvey);
     await newSurvey.save();
-    await addQuestionsToSurvey(newSurvey._id, questionIds); // Add questions to survey
+    // await addQuestionsToSurvey(newSurvey._id, questionIds); // Add questions to survey
     console.log(`Survey create successfully in db`);
     res.status(201).send({ message: 'Survey created successfully!', survey: newSurvey });
   } catch (err) {
-    console.log(err.message)
+    console.log(`error: ${err.message}`)
     res.status(400).send({ error: err.message });
   }
 });

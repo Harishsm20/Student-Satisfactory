@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { User } from './../views/authentication/shared/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,4 +21,13 @@ export class JwtService {
     }
     return '';
   }
+  public getId(): string {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return decodedToken?.userId || '';
+    }
+    return '';
+  }
 }
+

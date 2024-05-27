@@ -1,6 +1,4 @@
 const express = require('express');
-// import { QuestionsComponent } from './../client/src/app/views/questions/questions.component';
-
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
