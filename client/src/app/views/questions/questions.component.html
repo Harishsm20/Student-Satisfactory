@@ -5,6 +5,17 @@
     <h3>{{ survey.title }}</h3>
     <p>{{ survey.description }}</p>
 
+    
+  <div *ngFor="let question of questionsB;">
+    <div class="question-item form-check">
+      <input type="checkbox" class="form-check-input" id="{{ question._id }}"
+             [value]="question._id"
+             (change)="onQuestionSelectionChange(question?._id)">  <label class="form-check-label" for="{{ question?._id }}">
+        {{ question.text }}
+      </label>
+    </div>
+  </div>
+<!-- 
     <div *ngIf="isSurveyOpen">
       <p>This survey is currently open for submissions.</p>
 
@@ -34,7 +45,8 @@
       <option value="Spring 2024">Spring 2024</option>
       <option value="Summer 2024">Summer 2024</option>
     </select>
-  </div>
+  </div> -->
+
 </div>
 
 
