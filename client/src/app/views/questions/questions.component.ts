@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +9,7 @@ import { FormsModule } from '@angular/forms';
   _id: string | undefined;
   text: string;
   options: { text: string }[]; 
+  optionsSelected?: { [key: string]: boolean }; 
   isSelected?: boolean;
 }
 @Component({
@@ -15,11 +17,11 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './questions.component.html',
   styleUrls: ['./questions.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,ReactiveFormsModule, CommonModule,],
   providers: [SurveyService] 
 })
 export class QuestionsComponent implements OnInit {
-  questionsB: Question[] = []; 
+  questions: Question[] = []; 
   selectedQuestionIds: string[] = [];
   survey: any; // Placeholder for survey data
   isSurveyOpen = false;
@@ -39,28 +41,39 @@ export class QuestionsComponent implements OnInit {
     console.log("Fetch function reached");
     this.surveyService.getQuestions().subscribe(questions => {
       console.log("Getting Questions");
-      this.questionsB = questions.map(question => ({
+      this.questions = questions.map(question => ({
         _id: question._id,
         text: question.text,
         options: question.options
       }));
-      console.log(this.questionsB);
+      console.table(this.questions);
     });
   }
-  onQuestionSelectionChange(questionId: string = "") {
-    const questionIndex = this.questionsB.findIndex(question => question._id === questionId);
-    if (questionIndex !== -1) {
-      this.questionsB[questionIndex].isSelected = !this.questionsB[questionIndex].isSelected;
 
-      if (this.questionsB[questionIndex].isSelected) {
-        this.selectedQuestionIds.push(questionId);
-      } else {
-        const index = this.selectedQuestionIds.indexOf(questionId);
-        if (index !== -1) {
-          this.selectedQuestionIds.splice(index, 1);
-        }
+
+  onQuestionSelectionChange(questionId: string="", optionText: string="") {
+  const questionIndex = this.questions?.findIndex(question => question._id === questionId);
+  if (questionIndex !== -1) {
+    const question = this.questions[questionIndex];
+    
+    if (!question.optionsSelected) {
+      question.optionsSelected = {}; // Initialization if not present
+    }
+    question.optionsSelected[optionText] = !question.optionsSelected[optionText] || false;
+
+    const isSelected = question.optionsSelected[optionText];
+    if (isSelected) {
+      // Option selected, add questionId-optionText pair to selectedQuestionIds
+      this.selectedQuestionIds.push(`${questionId}-${optionText}`);
+    } else {
+      // Option deselected, remove questionId-optionText pair from selectedQuestionIds
+      const index = this.selectedQuestionIds.indexOf(`${questionId}-${optionText}`);
+      if (index !== -1) {
+        this.selectedQuestionIds.splice(index, 1);
       }
     }
+  }
+  
      // if(this.selectedQuestionIds.length>0){
     //   console.table(this.selectedQuestionIds);
     // }
@@ -68,7 +81,21 @@ export class QuestionsComponent implements OnInit {
     //   console.log("Empty array");
     // }
   }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
   // getFilteredSurveys() {
   //   this.surveyService.getFilteredSurveys({ semester: this.selectedSemester })
   //     .subscribe(surveys => {
