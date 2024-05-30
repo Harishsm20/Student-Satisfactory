@@ -30,8 +30,8 @@ export class SurveyService {
 
   constructor(private http: HttpClient) { }
 
-  getSurveyById(surveyId: string): Observable<Survey> {
-    return this.http.get<Survey>(`${this.baseUrl}/surveys/${surveyId}`); 
+  getSurveyByBatch(batch: string): Observable<Survey> {
+    return this.http.get<Survey>(`${this.baseUrl}/surveys/${batch}`); 
   }
 
   getFilteredSurveys(filter?: { semester?: string }): Observable<Survey[]> {

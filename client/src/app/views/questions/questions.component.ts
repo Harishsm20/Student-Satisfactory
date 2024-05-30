@@ -4,7 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
  // Needed for route parameters and navigation
- import { SurveyService } from '../../service/survey.service'; // Import your Survey service
+ import { SurveyService } from '../../service/survey.service'; 
+ import { JwtService } from '../../service/jwt.service';
+ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+
  interface Question {
   _id: string | undefined;
   text: string;
@@ -18,9 +21,14 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./questions.component.scss'],
   standalone: true,
   imports: [CommonModule, FormsModule,ReactiveFormsModule, CommonModule,],
-  providers: [SurveyService] 
+  providers: [SurveyService,
+    { provide: JWT_OPTIONS, useValue: {} },
+    JwtHelperService, JwtService
+  ] 
 })
 export class QuestionsComponent implements OnInit {
+  userRole: string = '';
+  userBatch: string = '' ;
   questions: Question[] = []; 
   selectedQuestionIds: string[] = [];
   survey: any; // Placeholder for survey data
@@ -31,11 +39,16 @@ export class QuestionsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private surveyService: SurveyService
+    private surveyService: SurveyService,
+    private jwtService: JwtService 
   ) {}
 
   ngOnInit(): void {
     this.fetchAvailableQuestions();
+    this.userBatch = this.jwtService.getbatch(); 
+    this.userRole = this.jwtService.getRole();
+    this.surveyService.getSurveyByBatch(this.userBatch);
+    console.log( ` check response:  ${this.surveyService.getSurveyByBatch(this.userBatch) }` )
   }
   fetchAvailableQuestions() {
     console.log("Fetch function reached");
@@ -52,6 +65,8 @@ export class QuestionsComponent implements OnInit {
 
 
   onQuestionSelectionChange(questionId: string="", optionText: string="") {
+    console.log(`Batch : ${this.userBatch}`);
+    console.log(`role : ${this.userRole}`);
   const questionIndex = this.questions?.findIndex(question => question._id === questionId);
   if (questionIndex !== -1) {
     const question = this.questions[questionIndex];

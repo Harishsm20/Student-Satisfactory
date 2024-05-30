@@ -50,7 +50,6 @@ export class CreateSurveyComponent implements OnInit {
   createForm() {
     this.surveyForm = this.fb.group({
       batch: ['', Validators.required],
-      semester: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
       questions: [[]] ,

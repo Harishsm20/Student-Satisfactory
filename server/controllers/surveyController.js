@@ -29,7 +29,6 @@ router.post('/createSurvey', async (req, res) => {
   try {
     const newSurvey = new Survey({
       batch,
-      semester,
       startDate,
       endDate,
       faculty,
@@ -67,15 +66,22 @@ router.get('/getAllSurveys', async (req, res) => {
 });
 
 // Get a specific survey by ID
-router.get('/getSurveyById/:surveyId', async (req, res) => {
-  const surveyId = req.params.surveyId;
-  try {
-    const survey = await Survey.findById(surveyId).populate('faculty questions'); // Populate faculty and questions data
+router.get('/getSurveyByBatch/:batch', async (req, res) => {
+  const batch = req.params.batch;
+  try { 
+    const survey = await Survey.findOne({ batch: batch })
+      .populate('faculty')
+      .populate('questions');
     if (!survey) {
       return res.status(404).send({ message: 'Survey not found!' });
     }
+    console.log(survey);
     res.status(200).send(survey);
-  } catch (err) {
+    // const survey = await Survey.findByBatch(batch).populate('faculty questions'); // Populate faculty and questions data
+    // if (!survey) {
+    //   return res.status(404).send({ message: 'Survey not found!' });
+    // }
+ } catch (err) {
     res.status(500).send({ error: err.message });
   }
 });

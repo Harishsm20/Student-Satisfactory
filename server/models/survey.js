@@ -6,9 +6,6 @@ const surveySchema = new mongoose.Schema({
     required: true,
   },
  
-  semester: {
-    type: String,
-  },
   startDate: {
     type: Date,
     required: true,

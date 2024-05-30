@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
    },
   batch: {
     type: String,
-    required: false // Assuming batch is optional
+    required: true // Assuming batch is optional
   },
   createdAt: {
     type: Date,

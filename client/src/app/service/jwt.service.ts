@@ -29,5 +29,13 @@ export class JwtService {
     }
     return '';
   }
+  public getbatch(): string {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return decodedToken?.batch || '';
+    }
+    return '';
+  }
 }
 
