@@ -1,10 +1,10 @@
 <div class="container">
   <h2>Survey Details</h2>
 
-  <!-- <div *ngIf="survey"> -->
-    <!-- <h3>{{ survey.title }}</h3>
-    <p>{{ survey.description }}</p> -->
-
+  <div *ngIf="survey">
+    <h3>Survey for Batch: {{ survey.batch }}</h3>
+    <p>Start Date: {{ survey.startDate | date }}</p>
+    <p>End Date: {{ survey.endDate | date }}</p>
     <div *ngIf="questions.length > 0">
       <div *ngFor="let question of questions;">
         <div class="question-item form-check">
@@ -21,6 +21,28 @@
         </div>
       </div>
     </div>
+
+    <div *ngIf="isSurveyOpen">
+      <p>This survey is currently open for submissions.</p>
+
+      <div *ngFor="let question of survey.questions">
+        <p>{{ question.text }}</p>
+        <textarea [(ngModel)]="answer" rows="3"></textarea>
+      </div>
+
+      <button type="button" class="btn btn-primary" (click)="submitSurvey()">
+        Submit Survey
+      </button>
+    </div>
+
+    <div *ngIf="!isSurveyOpen">
+      <p>This survey is closed for submissions.</p>
+    </div>
+  </div>
+
+  <div *ngIf="!survey">
+    <p>Survey not found or error retrieving data.</p>
+  </div>
   <!-- </div> -->
 
 <!-- 

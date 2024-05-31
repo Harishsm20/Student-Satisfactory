@@ -47,9 +47,37 @@ export class QuestionsComponent implements OnInit {
     this.fetchAvailableQuestions();
     this.userBatch = this.jwtService.getbatch(); 
     this.userRole = this.jwtService.getRole();
-    this.surveyService.getSurveyByBatch(this.userBatch);
-    console.log( ` check response:  ${this.surveyService.getSurveyByBatch(this.userBatch) }` )
+    this.fetchSurvey();
   }
+
+  fetchSurvey() {
+    this.surveyService.getSurveyByBatch(this.userBatch)
+      .subscribe(
+        response => {
+          this.survey = response;
+          console.log('Survey response:', response);
+          this.checkSurveyDates();
+        },
+        error => {
+          console.error('Error fetching survey:', error);
+          // Handle error accordingly
+        }
+      );
+  }
+
+  checkSurveyDates() {
+    const currentDate = new Date();
+    const startDate = new Date(this.survey.startDate);
+    const endDate = new Date(this.survey.endDate);
+
+    if (currentDate >= startDate && currentDate <= endDate) {
+      this.isSurveyOpen = true;
+    } else {
+      this.isSurveyOpen = false;
+    }
+  }
+
+
   fetchAvailableQuestions() {
     console.log("Fetch function reached");
     this.surveyService.getQuestions().subscribe(questions => {
@@ -67,6 +95,8 @@ export class QuestionsComponent implements OnInit {
   onQuestionSelectionChange(questionId: string="", optionText: string="") {
     console.log(`Batch : ${this.userBatch}`);
     console.log(`role : ${this.userRole}`);
+    this.surveyService.getSurveyByBatch(this.userBatch);
+
   const questionIndex = this.questions?.findIndex(question => question._id === questionId);
   if (questionIndex !== -1) {
     const question = this.questions[questionIndex];
@@ -95,6 +125,13 @@ export class QuestionsComponent implements OnInit {
     // else{
     //   console.log("Empty array");
     // }
+  }
+  onSemesterChange(value: string) {
+    // Handle semester filter change
+  }
+
+  submitSurvey() {
+    // Handle survey submission
   }
 
 }

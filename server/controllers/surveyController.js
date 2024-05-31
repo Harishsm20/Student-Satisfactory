@@ -65,23 +65,22 @@ router.get('/getAllSurveys', async (req, res) => {
   }
 });
 
-// Get a specific survey by ID
+// Get a specific survey by Batch
 router.get('/getSurveyByBatch/:batch', async (req, res) => {
   const batch = req.params.batch;
   try { 
     const survey = await Survey.findOne({ batch: batch })
       .populate('faculty')
       .populate('questions');
+
     if (!survey) {
       return res.status(404).send({ message: 'Survey not found!' });
     }
-    console.log(survey);
+    
+    console.log('Survey found:', survey);
     res.status(200).send(survey);
-    // const survey = await Survey.findByBatch(batch).populate('faculty questions'); // Populate faculty and questions data
-    // if (!survey) {
-    //   return res.status(404).send({ message: 'Survey not found!' });
-    // }
- } catch (err) {
+  } catch (err) {
+    console.error('Error fetching survey:', err);
     res.status(500).send({ error: err.message });
   }
 });
