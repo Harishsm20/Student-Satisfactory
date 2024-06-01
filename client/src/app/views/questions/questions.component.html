@@ -5,6 +5,81 @@
     <h3>Survey for Batch: {{ survey.batch }}</h3>
     <p>Start Date: {{ survey.startDate | date }}</p>
     <p>End Date: {{ survey.endDate | date }}</p>
+    <div class="dropdown mb-3" style="width: 50%;">
+      <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" aria-haspopup="true" [attr.aria-expanded]="visible" (click)="toggleCollapse()">
+        Filter
+      </button>
+      <div [ngClass]="{'show': visible}" class="dropdown-menu" id="dropdownMenu" aria-labelledby="filterDropdown" style="width: 75%; padding: 1em;">
+        <div class="form-group" style="margin-bottom: 10px;">
+          <label for="batchFilter">Semester:</label>
+          <select id="batchFilter" class="form-control">
+            <option value="" disabled selected>Select the Semester</option>
+            <option value="1">Semester 1</option>
+          </select>
+        </div>
+        <button class="btn btn-primary">Apply Filters</button>
+      </div>
+    </div>
+    
+
+
+    <table class="table table-striped" color="dark">
+      <thead>
+        <tr>
+          <th scope="col">Q.No</th>
+          <th scope="col">Questions</th>
+          <th scope="col">Rating 1</th>
+          <th scope="col">Rating 2</th>
+          <th scope="col">Rating 3</th>
+          <th scope="col">Rating 4</th>
+          <th scope="col">Rating 5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let question of questions; let i = index">
+          <th scope="row">{{ i + 1 }}</th> <td>{{ question.text }}</td>
+          <td>
+            <input type="radio" name="rating1_{{ i }}" value="1"> </td>
+          <td>
+            <input type="radio" name="rating2_{{ i }}" value="2"> </td>
+          <td>
+            <input type="radio" name="rating3_{{ i }}" value="3"> </td>
+          <td>
+            <input type="radio" name="rating4_{{ i }}" value="4"> </td>
+          <td>
+            <input type="radio" name="rating5_{{ i }}" value="5"> </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="isSurveyOpen">
+      <p>This survey is currently open for submissions.</p>
+      <button type="button" class="btn btn-primary" (click)="submitSurvey()">
+        Submit Survey
+      </button>
+    </div>
+
+    <div *ngIf="!isSurveyOpen">
+      <p>This survey is closed for submissions.</p>
+    </div>
+  </div>
+
+  <div *ngIf="!survey">
+    <p>Survey not found or error retrieving data.</p>
+  </div>
+</div>
+
+
+
+
+
+<!-- <div class="container">
+  <h2>Survey Details</h2>
+
+  <div *ngIf="survey">
+    <h3>Survey for Batch: {{ survey.batch }}</h3>
+    <p>Start Date: {{ survey.startDate | date }}</p>
+    <p>End Date: {{ survey.endDate | date }}</p>
     <div *ngIf="questions.length > 0">
       <div *ngFor="let question of questions;">
         <div class="question-item form-check">
@@ -43,41 +118,8 @@
   <div *ngIf="!survey">
     <p>Survey not found or error retrieving data.</p>
   </div>
-  <!-- </div> -->
-
-<!-- 
-    <div *ngIf="isSurveyOpen">
-      <p>This survey is currently open for submissions.</p>
-
-      <div *ngFor="let question of survey.questions">
-        <p>{{ question.text }}</p>
-        <textarea [(ngModel)]="answer" rows="3"></textarea>
-      </div>
-
-      <button type="button" class="btn btn-primary" (click)="submitSurvey()">
-        Submit Survey
-      </button>
-    </div>
-
-    <div *ngIf="!isSurveyOpen">
-      <p>This survey is closed for submissions.</p>
-    </div>
-  </div>
-
-  <div *ngIf="!survey">
-    <p>Survey not found or error retrieving data.</p>
-  </div>
-
-  <div class="mb-3">
-    <label for="semesterFilter">Filter by Semester:</label>
-    <select #semesterFilter class="form-select" id="semesterFilter" [(ngModel)]="selectedSemester" (change)="onSemesterChange(semesterFilter.value)">
-      <option value="" selected="disabled">All Semesters</option>
-      <option value="Spring 2024">Spring 2024</option>
-      <option value="Summer 2024">Summer 2024</option>
-    </select>
-  </div> -->
-
 </div>
+ -->
 
 
 
@@ -85,8 +127,18 @@
 
 
 
-<!-- Table template structure:
-  
+
+
+
+
+
+
+
+
+
+
+
+ <!-- Table template structure:
   
   
   
@@ -204,4 +256,4 @@
       </td>
     </tr>
   </tbody>
-</table> -->
+</table>  -->

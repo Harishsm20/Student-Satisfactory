@@ -7,7 +7,7 @@ interface Survey {
   batch: string;
   // title: string;
   // description: string;
-  semester: string;
+  // semester: string;
   // questionIds: string;
   startDate: Date;
   endDate: Date;

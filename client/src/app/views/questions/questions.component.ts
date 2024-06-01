@@ -36,6 +36,10 @@ export class QuestionsComponent implements OnInit {
   selectedSemester: string = '';
   answer: string = ''; // Property to hold user's answer (if needed)
 
+  // for filter and visibility
+  visible = false;
+  isFilterOpen = false; 
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -132,6 +136,14 @@ export class QuestionsComponent implements OnInit {
 
   submitSurvey() {
     // Handle survey submission
+  }
+
+
+  toggleFilter() {
+    this.isFilterOpen = !this.isFilterOpen;
+  }
+  toggleCollapse() {
+    this.visible = !this.visible; // Toggle visibility
   }
 
 }
