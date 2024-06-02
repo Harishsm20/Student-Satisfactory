@@ -32,6 +32,7 @@ export class QuestionsComponent implements OnInit {
   questions: Question[] = []; 
   selectedQuestionIds: string[] = [];
   survey: any; // Placeholder for survey data
+  filteredSurvey: any;
   isSurveyOpen = false;
   selectedSemester: string = '';
   answer: string = ''; // Property to hold user's answer (if needed)
@@ -75,7 +76,8 @@ export class QuestionsComponent implements OnInit {
     const endDate = new Date(this.survey.endDate);
 
     if (currentDate >= startDate && currentDate <= endDate) {
-      this.isSurveyOpen = true;
+      
+      this.isSurveyOpen = this.selectedSemester === this.survey.semester;
     } else {
       this.isSurveyOpen = false;
     }
@@ -131,8 +133,23 @@ export class QuestionsComponent implements OnInit {
     // }
   }
   onSemesterChange(value: string) {
-    // Handle semester filter change
+    this.selectedSemester = value;
+    this.applyFilters();
   }
+
+  applyFilters() {
+    if (this.survey && this.survey.semester === this.selectedSemester) {
+      this.checkSurveyDates();
+      if (this.isSurveyOpen) {
+        this.filteredSurvey = this.survey;
+      } else {
+        this.filteredSurvey = null;
+      }
+    } else {
+      this.filteredSurvey = null;
+    }
+  }
+
 
   submitSurvey() {
     // Handle survey submission

@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { JwtService } from '../../service/jwt.service';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { User } from '../authentication/shared/user.model';
+import { Router } from '@angular/router'; 
 
 interface Question {
   _id: string | undefined;
@@ -37,7 +38,8 @@ export class CreateSurveyComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private surveyService: SurveyService,
-    private jwtService: JwtService 
+    private jwtService: JwtService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -50,6 +52,7 @@ export class CreateSurveyComponent implements OnInit {
   createForm() {
     this.surveyForm = this.fb.group({
       batch: ['', Validators.required],
+      semester:['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
       questions: [[]] ,
@@ -78,6 +81,11 @@ export class CreateSurveyComponent implements OnInit {
 
       this.surveyService.createSurvey(surveyData).subscribe(response => {
         console.log('Survey created successfully!', response);
+        alert('<div class="alert alert-success" role="alert">Survey created successfully!</div>');
+        setTimeout(() => {
+          this.surveyForm.reset();
+          this.router.navigate(['/survey']); // Navigate to a specific route (e.g., surveys list)
+        }, 100); 
       }, error => {
         console.error('Error creating survey:', error);
       });

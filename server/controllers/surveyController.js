@@ -29,6 +29,7 @@ router.post('/createSurvey', async (req, res) => {
   try {
     const newSurvey = new Survey({
       batch,
+      semester,
       startDate,
       endDate,
       faculty,
@@ -46,24 +47,7 @@ router.post('/createSurvey', async (req, res) => {
 });
 
 // Get all surveys (filter by faculty or active status)
-router.get('/getAllSurveys', async (req, res) => {
-  const { facultyId, isActive } = req.query; // Optional query parameters for filtering
-  let filter = {};
-  if (facultyId) {
-    filter.faculty = facultyId;
-  }
-  if (isActive) {
-    const today = new Date();
-    filter.startDate = { $lte: today };
-    filter.endDate = { $gte: today };
-  }
-  try {
-    const surveys = await Survey.find(filter).populate('faculty'); // Populate faculty data
-    res.status(200).send(surveys);
-  } catch (err) {
-    res.status(500).send({ error: err.message });
-  }
-});
+
 
 // Get a specific survey by Batch
 router.get('/getSurveyByBatch/:batch', async (req, res) => {

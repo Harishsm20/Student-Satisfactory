@@ -16,7 +16,23 @@
       batch is required.
     </div>
   </div>
-
+  <div class="mb-3">
+    <label for="Semester" class="form-label">Semester:</label>
+    <select class="form-select" id="semester" formControlName="semester">
+      <option value="">Select Semester</option>
+      <option value="Semester1">Semester1</option>
+      <option value="Semester2">Semester2</option>
+      <option value="Semester3">Semester3</option>
+      <option value="Semester4">Semester4</option>
+      <option value="Semester5">Semester5</option>
+      <option value="Semester6">Semester6</option>
+      <option value="Semester7">Semester7</option>
+      <option value="Semester8">Semester8</option>
+    </select>
+    <div *ngIf="surveyForm?.get('semester')?.hasError('required')" class="alert alert-danger">
+      Semester is required.
+    </div>
+  </div>
 
   <div class="mb-3">
     <label for="startDate" class="form-label">Start Date:</label>

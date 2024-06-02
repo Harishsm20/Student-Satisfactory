@@ -1,27 +1,37 @@
 <div class="container">
   <h2>Survey Details</h2>
 
-  <div *ngIf="survey">
-    <h3>Survey for Batch: {{ survey.batch }}</h3>
-    <p>Start Date: {{ survey.startDate | date }}</p>
-    <p>End Date: {{ survey.endDate | date }}</p>
-    <div class="dropdown mb-3" style="width: 50%;">
-      <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" aria-haspopup="true" [attr.aria-expanded]="visible" (click)="toggleCollapse()">
-        Filter
-      </button>
-      <div [ngClass]="{'show': visible}" class="dropdown-menu" id="dropdownMenu" aria-labelledby="filterDropdown" style="width: 75%; padding: 1em;">
-        <div class="form-group" style="margin-bottom: 10px;">
-          <label for="batchFilter">Semester:</label>
-          <select id="batchFilter" class="form-control">
-            <option value="" disabled selected>Select the Semester</option>
-            <option value="1">Semester 1</option>
-          </select>
-        </div>
-        <button class="btn btn-primary">Apply Filters</button>
+  <div class="dropdown mb-3" style="width: 50%;">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" aria-haspopup="true" [attr.aria-expanded]="visible" (click)="toggleCollapse()">
+      Filter
+    </button>
+    <div [ngClass]="{'show': visible}" class="dropdown-menu" id="dropdownMenu" aria-labelledby="filterDropdown" style="width: 75%; padding: 1em;">
+      <div class="form-group" style="margin-bottom: 10px;">
+        <label for="semesterFilter">Semester:</label>
+        <br><br>
+        <select #semesterFilter class="form-control" (change)="onSemesterChange(semesterFilter.value)">
+          <option value="" disabled selected>Select the Semester</option>
+          <option value="Semester1">Semester 1</option>
+          <option value="Semester2">Semester 2</option>
+          <option value="Semester3">Semester 3</option>
+          <option value="Semester4">Semester 4</option>
+          <option value="Semester5">Semester 5</option>
+          <option value="Semester6">Semester 6</option>
+          <option value="Semester7">Semester 7</option>
+          <option value="Semester8">Semester 8</option>
+          <!-- Add other semester options as needed -->
+        </select>
       </div>
+      <!-- <button class="btn btn-primary" (click)="applyFilters()">Apply Filters</button> -->
     </div>
-    
+  </div>
 
+  <div *ngIf="filteredSurvey">
+    <h1>The survey is open</h1>
+    <p>Survey for Batch: {{ filteredSurvey.batch }}</p>
+    <p>Start Date: {{ filteredSurvey.startDate | date }}</p>
+    <p>End Date: {{ filteredSurvey.endDate | date }}</p>
+    <p>Semester: {{ filteredSurvey.semester}}</p>
 
     <table class="table table-striped" color="dark">
       <thead>
@@ -39,15 +49,15 @@
         <tr *ngFor="let question of questions; let i = index">
           <th scope="row">{{ i + 1 }}</th> <td>{{ question.text }}</td>
           <td>
-            <input type="radio" name="rating1_{{ i }}" value="1"> </td>
+            <input type="radio" name="rating_{{ i }}" value="1"> </td>
           <td>
-            <input type="radio" name="rating2_{{ i }}" value="2"> </td>
+            <input type="radio" name="rating_{{ i }}" value="2"> </td>
           <td>
-            <input type="radio" name="rating3_{{ i }}" value="3"> </td>
+            <input type="radio" name="rating_{{ i }}" value="3"> </td>
           <td>
-            <input type="radio" name="rating4_{{ i }}" value="4"> </td>
+            <input type="radio" name="rating_{{ i }}" value="4"> </td>
           <td>
-            <input type="radio" name="rating5_{{ i }}" value="5"> </td>
+            <input type="radio" name="rating_{{ i }}" value="5"> </td>
         </tr>
       </tbody>
     </table>
@@ -64,11 +74,14 @@
     </div>
   </div>
 
+  <div *ngIf="!filteredSurvey && survey">
+    <p>Survey not found for the selected semester or survey is closed for submissions.</p>
+  </div>
+
   <div *ngIf="!survey">
     <p>Survey not found or error retrieving data.</p>
   </div>
 </div>
-
 
 
 
@@ -122,138 +135,3 @@
  -->
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- <!-- Table template structure:
-  
-  
-  
-  <div class="dropdown mb-3" style="width: 50%;">
-  <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" aria-haspopup="true" aria-expanded="false" style="width: 15%;" (click)="toggleCollapse()">
-    Filter
-  </button>
-  <div [visible]="visible" cCollapse class="dropdown-menu" id="dropdownMenu" aria-labelledby="filterDropdown" style="width: 75%; padding: 1em;">
-    <div class="form-group" style="margin-bottom: 10px;">
-      <label for="batchFilter">Semester:</label>
-      <select id="batchFilter" class="form-control">
-        <option value="" disabled selected>Select the Semester</option>
-        <option value="1">Semester 1</option>
-        <option value="2">Semester 2</option>
-        <option value="3">Semester 3</option>
-        <option value="4">Semester 4</option>
-        <option value="5">Semester 5</option>
-        <option value="6">Semester 6</option>
-        <option value="7">Semester 7</option>
-        <option value="8">Semester 8</option>
-      </select>
-    </div>
-    <button class="btn btn-primary">Apply Filters</button>
-
-  </div>
-</div>
-
-<table [striped]="true" cTable color="dark">
-  <thead>
-    <tr>
-      <th scope="col">Q.No</th>
-      <th scope="col">Questions</th>
-      <th scope="col">Rating 1</th>
-      <th scope="col">Rating 2</th>
-      <th scope="col">Rating 3</th>
-      <th scope="col">Rating 4</th>
-      <th scope="col">Rating 5</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>
-        <input type="radio" name="rating1_1" value="1"> 
-      </td>
-      <td>
-        <input type="radio" name="rating2_1" value="2"> 
-      </td>
-      <td>
-        <input type="radio" name="rating2_1" value="3"> 
-      </td>
-      <td>
-        <input type="radio" name="rating2_1" value="4"> 
-      </td>
-      <td>
-        <input type="radio" name="rating2_1" value="5"> 
-      </td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>
-        <input type="radio" name="rating1_2" value="1">
-      </td>
-      <td>
-        <input type="radio" name="rating2_2" value="2">
-      </td>
-      <td>
-        <input type="radio" name="rating2_2" value="3">
-      </td>
-      <td>
-        <input type="radio" name="rating2_2" value="4">
-      </td>
-      <td>
-        <input type="radio" name="rating2_2" value="5">
-      </td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry the Bird</td>
-      <td>
-        <input type="radio" name="rating1_3" value="1"> 
-      </td>
-      <td>
-        <input type="radio" name="rating2_3" value="2"> 
-      </td>
-      <td>
-        <input type="radio" name="rating2_3" value="3"> 
-      </td>
-      <td>
-        <input type="radio" name="rating2_3" value="4"> 
-      </td>
-      <td>
-        <input type="radio" name="rating2_3" value="5"> 
-      </td>
-    </tr>
-    <tr>
-      <th scope="row">4</th>
-      <td>Another Student</td>
-      <td>
-        <input type="radio" name="rating1_4" value="1">
-      </td>
-      <td>
-        <input type="radio" name="rating2_4" value="2">
-      </td>
-      <td>
-        <input type="radio" name="rating2_4" value="3">
-      </td>
-      <td>
-        <input type="radio" name="rating2_4" value="4">
-      </td>
-      <td>
-        <input type="radio" name="rating2_4" value="5">
-      </td>
-    </tr>
-  </tbody>
-</table>  -->
