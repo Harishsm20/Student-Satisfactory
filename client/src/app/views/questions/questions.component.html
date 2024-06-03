@@ -22,7 +22,6 @@
           <!-- Add other semester options as needed -->
         </select>
       </div>
-      <!-- <button class="btn btn-primary" (click)="applyFilters()">Apply Filters</button> -->
     </div>
   </div>
 
@@ -33,45 +32,51 @@
     <p>End Date: {{ filteredSurvey.endDate | date }}</p>
     <p>Semester: {{ filteredSurvey.semester}}</p>
 
-    <table class="table table-striped" color="dark">
-      <thead>
-        <tr>
-          <th scope="col">Q.No</th>
-          <th scope="col">Questions</th>
-          <th scope="col">Rating 1</th>
-          <th scope="col">Rating 2</th>
-          <th scope="col">Rating 3</th>
-          <th scope="col">Rating 4</th>
-          <th scope="col">Rating 5</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let question of questions; let i = index">
-          <th scope="row">{{ i + 1 }}</th> <td>{{ question.text }}</td>
-          <td>
-            <input type="radio" name="rating_{{ i }}" value="1"> </td>
-          <td>
-            <input type="radio" name="rating_{{ i }}" value="2"> </td>
-          <td>
-            <input type="radio" name="rating_{{ i }}" value="3"> </td>
-          <td>
-            <input type="radio" name="rating_{{ i }}" value="4"> </td>
-          <td>
-            <input type="radio" name="rating_{{ i }}" value="5"> </td>
-        </tr>
-      </tbody>
-    </table>
+    <form (ngSubmit)="submitSurvey()">
+      <table class="table table-striped" color="dark">
+        <thead>
+          <tr>
+            <th scope="col">Q.No</th>
+            <th scope="col">Questions</th>
+            <th scope="col">Rating 1</th>
+            <th scope="col">Rating 2</th>
+            <th scope="col">Rating 3</th>
+            <th scope="col">Rating 4</th>
+            <th scope="col">Rating 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let question of questions; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ question.text }}</td>
+            <td>
+              <input type="radio" name="rating_{{ i }}" [(ngModel)]="question.selectedOption" [value]="1">
+            </td>
+            <td>
+              <input type="radio" name="rating_{{ i }}" [(ngModel)]="question.selectedOption" [value]="2">
+            </td>
+            <td>
+              <input type="radio" name="rating_{{ i }}" [(ngModel)]="question.selectedOption" [value]="3">
+            </td>
+            <td>
+              <input type="radio" name="rating_{{ i }}" [(ngModel)]="question.selectedOption" [value]="4">
+            </td>
+            <td>
+              <input type="radio" name="rating_{{ i }}" [(ngModel)]="question.selectedOption" [value]="5">
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    <div *ngIf="isSurveyOpen">
-      <p>This survey is currently open for submissions.</p>
-      <button type="button" class="btn btn-primary" (click)="submitSurvey()">
-        Submit Survey
-      </button>
-    </div>
+      <div *ngIf="isSurveyOpen">
+        <p>This survey is currently open for submissions.</p>
+        <button type="submit" class="btn btn-primary">Submit Survey</button>
+      </div>
 
-    <div *ngIf="!isSurveyOpen">
-      <p>This survey is closed for submissions.</p>
-    </div>
+      <div *ngIf="!isSurveyOpen">
+        <p>This survey is closed for submissions.</p>
+      </div>
+    </form>
   </div>
 
   <div *ngIf="!filteredSurvey && survey">
@@ -82,56 +87,3 @@
     <p>Survey not found or error retrieving data.</p>
   </div>
 </div>
-
-
-
-
-<!-- <div class="container">
-  <h2>Survey Details</h2>
-
-  <div *ngIf="survey">
-    <h3>Survey for Batch: {{ survey.batch }}</h3>
-    <p>Start Date: {{ survey.startDate | date }}</p>
-    <p>End Date: {{ survey.endDate | date }}</p>
-    <div *ngIf="questions.length > 0">
-      <div *ngFor="let question of questions;">
-        <div class="question-item form-check">
-          <h4 class="question-title">{{ question.text }}</h4>
-          <div *ngFor="let option of question.options">
-            <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="{{ question._id }}_{{ option.text }}"
-                     [value]="option.text" (change)="onQuestionSelectionChange(question._id, option.text)">
-              <label class="form-check-label" for="{{ question._id }}_{{ option.text }}">
-                {{ option.text }}hii!!
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="isSurveyOpen">
-      <p>This survey is currently open for submissions.</p>
-
-      <div *ngFor="let question of survey.questions">
-        <p>{{ question.text }}</p>
-        <textarea [(ngModel)]="answer" rows="3"></textarea>
-      </div>
-
-      <button type="button" class="btn btn-primary" (click)="submitSurvey()">
-        Submit Survey
-      </button>
-    </div>
-
-    <div *ngIf="!isSurveyOpen">
-      <p>This survey is closed for submissions.</p>
-    </div>
-  </div>
-
-  <div *ngIf="!survey">
-    <p>Survey not found or error retrieving data.</p>
-  </div>
-</div>
- -->
-
-

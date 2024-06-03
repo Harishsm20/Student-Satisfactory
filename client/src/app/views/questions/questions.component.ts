@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
   options: { text: string }[]; 
   optionsSelected?: { [key: string]: boolean }; 
   isSelected?: boolean;
+  selectedOption?: number;
 }
 @Component({
   selector: 'app-questions',
@@ -150,65 +151,56 @@ export class QuestionsComponent implements OnInit {
     }
   }
 
-
   submitSurvey() {
-    // Handle survey submission
+    const surveyResponses = this.questions.map((question, index) => ({
+      questionNo: index + 1,
+      questions: {
+        text: question.text,
+        option1: question.selectedOption === 1 ? 1 : 0,
+        option2: question.selectedOption === 2 ? 1 : 0,
+        option3: question.selectedOption === 3 ? 1 : 0,
+        option4: question.selectedOption === 4 ? 1 : 0,
+        option5: question.selectedOption === 5 ? 1 : 0,
+      }
+    }));
+  
+    const surveySubmission = {
+      questions: surveyResponses,
+      batch: this.filteredSurvey.batch,
+      semester: this.filteredSurvey.semester
+    };
+  
+    // Log the survey submission to check the structure
+    surveySubmission.questions.forEach((question) => {
+      console.log(`Question No: ${question.questionNo}`);
+      console.log(`Text: ${question.questions.text}`);
+      console.log(`Option 1: ${question.questions.option1}`);
+      console.log(`Option 2: ${question.questions.option2}`);
+      console.log(`Option 3: ${question.questions.option3}`);
+      console.log(`Option 4: ${question.questions.option4}`);
+      console.log(`Option 5: ${question.questions.option5}`);
+    });
+  
+    this.surveyService.submitSurvey(surveySubmission).subscribe(
+      response => {
+        console.log('Survey submitted successfully:', response);
+        // Handle successful submission (e.g., navigate to a confirmation page)
+      },
+      error => {
+        console.error('Error submitting survey:', error);
+        // Handle error during submission
+      }
+    );
   }
+  
+
 
 
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
   }
   toggleCollapse() {
-    this.visible = !this.visible; // Toggle visibility
+    this.visible = !this.visible;
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // getFilteredSurveys() {
-  //   this.surveyService.getFilteredSurveys({ semester: this.selectedSemester })
-  //     .subscribe(surveys => {
-  //       const surveyId = this.route.snapshot.paramMap.get('surveyId');
-  //       if (!surveyId) {
-  //         this.router.navigate(['/surveys']); // Redirect if no survey ID found
-  //         return;
-  //       }
-
-  //       const foundSurvey = surveys.find(survey => survey._id === surveyId);
-  //       if (foundSurvey) {
-  //         this.survey = foundSurvey;
-  //         this.isSurveyOpen = this.checkIfSurveyOpen(this.survey);
-  //       } else {
-  //         // Handle case where survey is not found (e.g., display message)
-  //         this.router.navigate(['/surveys']);
-  //       }
-  //     });
-  // }
-
-  // checkIfSurveyOpen(survey: any) {
-  //   const today = new Date();
-  //   return survey && survey.startDate <= today && survey.endDate >= today;
-  // }
-
-  // onSemesterChange(semester: string) {
-  //   this.selectedSemester = semester;
-  //   this.getFilteredSurveys(); // Re-fetch surveys based on the selected semester
-  // }
-
-//   submitSurvey() {
-//     console.log('Survey submitted!', this.answer); // Include answer in logs (if used)
-//     // Implement logic to send survey answers to your backend API
-//   }
-// }
