@@ -35,13 +35,13 @@ router.post('/createSurvey', async (req, res) => {
       faculty,
       questions,
     });
-    console.log(newSurvey);
+    // console.log(newSurvey);
     await newSurvey.save();
     // await addQuestionsToSurvey(newSurvey._id, questionIds); // Add questions to survey
     console.log(`Survey create successfully in db`);
     res.status(201).send({ message: 'Survey created successfully!', survey: newSurvey });
   } catch (err) {
-    console.log(`error: ${err.message}`)
+    // console.log(`error: ${err.message}`)
     res.status(400).send({ error: err.message });
   }
 });

@@ -7,6 +7,7 @@ const app = express();
 const authController = require('./controllers/authController'); // Import auth controller
 const surveyController = require('./controllers/surveyController');
 const questionController = require('./controllers/questionController');
+const responseController = require('./controllers/responseController');
 const dotenv = require('dotenv');
 
 
@@ -37,6 +38,7 @@ app.use(bodyParser.json());
 app.use('/auth', authController); // Use authController for /auth routes
 app.use('/surveys',surveyController);
 app.use('/questions',questionController);
+app.use('/response',responseController);
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
