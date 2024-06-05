@@ -154,14 +154,12 @@ export class QuestionsComponent implements OnInit {
   submitSurvey() {
     const surveyResponses = this.questions.map((question, index) => ({
       questionNo: index + 1,
-      questions: {
-        text: question.text,
-        option1: question.selectedOption === 1 ? 1 : 0,
-        option2: question.selectedOption === 2 ? 1 : 0,
-        option3: question.selectedOption === 3 ? 1 : 0,
-        option4: question.selectedOption === 4 ? 1 : 0,
-        option5: question.selectedOption === 5 ? 1 : 0,
-      }
+      text: question.text,
+      option1: question.selectedOption === 1 ? 1 : 0,
+      option2: question.selectedOption === 2 ? 1 : 0,
+      option3: question.selectedOption === 3 ? 1 : 0,
+      option4: question.selectedOption === 4 ? 1 : 0,
+      option5: question.selectedOption === 5 ? 1 : 0,
     }));
   
     const surveySubmission = {
@@ -173,12 +171,12 @@ export class QuestionsComponent implements OnInit {
     // Log the survey submission to check the structure
     surveySubmission.questions.forEach((question) => {
       console.log(`Question No: ${question.questionNo}`);
-      console.log(`Text: ${question.questions.text}`);
-      console.log(`Option 1: ${question.questions.option1}`);
-      console.log(`Option 2: ${question.questions.option2}`);
-      console.log(`Option 3: ${question.questions.option3}`);
-      console.log(`Option 4: ${question.questions.option4}`);
-      console.log(`Option 5: ${question.questions.option5}`);
+      console.log(`Text: ${question.text}`);
+      console.log(`Option 1: ${question.option1}`);
+      console.log(`Option 2: ${question.option2}`);
+      console.log(`Option 3: ${question.option3}`);
+      console.log(`Option 4: ${question.option4}`);
+      console.log(`Option 5: ${question.option5}`);
     });
   
     this.surveyService.submitSurvey(surveySubmission).subscribe(
