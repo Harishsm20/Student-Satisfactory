@@ -32,7 +32,7 @@
     <p>End Date: {{ filteredSurvey.endDate | date }}</p>
     <p>Semester: {{ filteredSurvey.semester}}</p>
 
-    <form (ngSubmit)="submitSurvey()">
+    <form (ngSubmit)="submitStudentResponse()">
       <table class="table table-striped" color="dark">
         <thead>
           <tr>
@@ -67,6 +67,10 @@
           </tr>
         </tbody>
       </table>
+
+      <div *ngIf="alertVisible" class="alert alert-success" role="alert">
+        {{ alertMessage }}
+      </div>
 
       <div *ngIf="isSurveyOpen">
         <p>This survey is currently open for submissions.</p>

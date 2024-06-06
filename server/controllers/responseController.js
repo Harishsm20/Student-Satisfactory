@@ -1,9 +1,42 @@
 const express = require('express');
 const ResponseQuestion = require('../models/responseQuestion');
+const Response =  require('../models/response');
 
 const router = express.Router();
 const app = express();
 app.use(express.json()); // Ensure JSON parsing middleware
+
+
+app.post('/submitStudentResponse', async (req, res) => {
+  const { batch, semester, studentRollNo } = req.body;
+
+  try {
+    console.log(`Received request to submit survey for batch: ${batch}, semester: ${semester}, studentRollNo: ${studentRollNo}`);
+
+    // Check if the student has already submitted the survey for the given batch and semester
+    const existingStudentResponse = await Response.findOne({ batch, semester, 'students.rollNo': studentRollNo });
+
+    if (existingStudentResponse) {
+      console.log(`Student ${studentRollNo} has already submitted the survey for batch ${batch}, semester ${semester}`);
+      return res.status(400).json({ message: 'Student has already submitted the survey' });
+    }
+
+    // Add the student's roll number to the students collection
+    const response = await Response.findOneAndUpdate(
+      { batch, semester },
+      { $addToSet: { students: { rollNo: studentRollNo } } },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+
+    console.log(`Student ${studentRollNo} successfully added to the survey for batch ${batch}, semester ${semester}`);
+    res.status(200).json({ message: 'Survey submitted successfully', response });
+  } catch (error) {
+    console.error('Error submitting survey:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 
 // Submit a survey response (student only)
 app.post('/submit-survey', async (req, res) => {

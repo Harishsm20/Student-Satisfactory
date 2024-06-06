@@ -29,18 +29,22 @@ import { FormsModule } from '@angular/forms';
 })
 export class QuestionsComponent implements OnInit {
   userRole: string = '';
-  userBatch: string = '' ;
+  userBatch: string = '';
   questions: Question[] = []; 
   selectedQuestionIds: string[] = [];
-  survey: any; // Placeholder for survey data
+  survey: any;
   filteredSurvey: any;
   isSurveyOpen = false;
   selectedSemester: string = '';
-  answer: string = ''; // Property to hold user's answer (if needed)
+  answer: string = '';
 
   // for filter and visibility
   visible = false;
   isFilterOpen = false; 
+
+
+  alertMessage: string = '';
+  alertVisible: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -98,41 +102,6 @@ export class QuestionsComponent implements OnInit {
     });
   }
 
-
-  onQuestionSelectionChange(questionId: string="", optionText: string="") {
-    console.log(`Batch : ${this.userBatch}`);
-    console.log(`role : ${this.userRole}`);
-    this.surveyService.getSurveyByBatch(this.userBatch);
-
-  const questionIndex = this.questions?.findIndex(question => question._id === questionId);
-  if (questionIndex !== -1) {
-    const question = this.questions[questionIndex];
-    
-    if (!question.optionsSelected) {
-      question.optionsSelected = {}; // Initialization if not present
-    }
-    question.optionsSelected[optionText] = !question.optionsSelected[optionText] || false;
-
-    const isSelected = question.optionsSelected[optionText];
-    if (isSelected) {
-      // Option selected, add questionId-optionText pair to selectedQuestionIds
-      this.selectedQuestionIds.push(`${questionId}-${optionText}`);
-    } else {
-      // Option deselected, remove questionId-optionText pair from selectedQuestionIds
-      const index = this.selectedQuestionIds.indexOf(`${questionId}-${optionText}`);
-      if (index !== -1) {
-        this.selectedQuestionIds.splice(index, 1);
-      }
-    }
-  }
-  
-     // if(this.selectedQuestionIds.length>0){
-    //   console.table(this.selectedQuestionIds);
-    // }
-    // else{
-    //   console.log("Empty array");
-    // }
-  }
   onSemesterChange(value: string) {
     this.selectedSemester = value;
     this.applyFilters();
@@ -181,7 +150,11 @@ export class QuestionsComponent implements OnInit {
   
     this.surveyService.submitSurvey(surveySubmission).subscribe(
       response => {
+        this.alertMessage = `Thankyou for submiiting the survey for ${this.selectedSemester}`;
+        this.alertVisible = true;
+
         console.log('Survey submitted successfully:', response);
+        
         // Handle successful submission (e.g., navigate to a confirmation page)
       },
       error => {
@@ -191,6 +164,27 @@ export class QuestionsComponent implements OnInit {
     );
   }
   
+  
+  submitStudentResponse() {
+    const studentResponse = {
+      batch: this.userBatch,
+      semester: this.selectedSemester,
+      studentRollNo: this.jwtService.getRollNo()
+    };
+  
+    this.surveyService.submitStudentResponse(studentResponse).subscribe(
+      response => {
+        console.log('Student response submitted successfully:', response);
+        this.submitSurvey();
+      },
+      error => {
+        this.alertMessage = `Survey Already submitted! for ${this.selectedSemester}`;
+        this.alertVisible = true;
+        console.error('Error submitting student response:', error);
+      }
+    );
+  }
+
 
 
 

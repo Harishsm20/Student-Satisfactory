@@ -1,25 +1,25 @@
 const mongoose = require('mongoose');
 
 const responseSchema = new mongoose.Schema({
-  student: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
+  batch: {
+    type: String,
+    required: true
   },
-  survey: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Survey',
-    required: true,
+  semester: {
+    type: String,
+    required: true
   },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-  answers: {
-    type: Object,
-    required: true,
-  },
+  students: [
+    {
+      rollNo: {
+        type: String,
+        required: true
+      }
+    }
+  ]
 });
+
+responseSchema.index({ batch: 1, semester: 1 }, { unique: true });
 
 const Response = mongoose.model('Response', responseSchema);
 module.exports = Response;

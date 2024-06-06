@@ -56,5 +56,10 @@ export class SurveyService {
     console.log(surveySubmission.questions);
     return this.http.post<any>(`${this.baseUrl}/response/submit-survey`, surveySubmission);
   }
+
+  submitStudentResponse(studentResponse: any): Observable<any> {
+    console.log(studentResponse);
+    return this.http.post(`${this.baseUrl}/response/submitStudentResponse`, studentResponse);
+  }
   
 }
