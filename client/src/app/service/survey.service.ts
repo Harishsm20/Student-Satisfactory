@@ -61,5 +61,9 @@ export class SurveyService {
     console.log(studentResponse);
     return this.http.post(`${this.baseUrl}/response/submitStudentResponse`, studentResponse);
   }
+
+  getResponseData(batch: string, semester: string, questionNo: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/response/responseData?batch=${batch}&semester=${semester}&questionNo=${questionNo}`);
+  }
   
 }

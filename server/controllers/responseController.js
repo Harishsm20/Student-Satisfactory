@@ -118,4 +118,33 @@ app.post('/submit-survey', async (req, res) => {
   }
 });
 
+app.get('/responseData', async (req, res) => {
+  const { batch, semester, questionNo } = req.query;
+
+  if (!batch || !semester || !questionNo) {
+    return res.status(400).json({ message: 'Missing required query parameters' });
+  }
+
+  try {
+    // Fetch the response data for the given batch, semester, and question number
+    const response = await ResponseQuestion.findOne({
+      batch,
+      semester,
+      'questions.questionNo': questionNo
+    }, {
+      'questions.$': 1 // Only select the specific question
+    });
+
+    if (!response) {
+      return res.status(404).json({ message: 'No response data found for the given criteria' });
+    }
+    console.log(response)
+    res.status(200).json(response);
+  } catch (error) {
+    console.error('Error fetching response data:', error);
+    res.status(500).json({ message: 'Error fetching response data', error: error.message });
+  }
+});
+
+
 module.exports = app;
