@@ -6,6 +6,7 @@ import { DocsCalloutComponent } from '@docs-components/public-api';
 import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { SurveyService } from '../../service/survey.service'; // Adjust the path as needed
 import { FormsModule } from '@angular/forms'; // For ngModel
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,7 +25,9 @@ import { FormsModule } from '@angular/forms'; // For ngModel
     CardComponent,
     CardHeaderComponent,
     ChartjsComponent,
-    FormsModule // For ngModel
+    FormsModule, // For ngModel
+    CommonModule
+
   ],
   providers: [SurveyService]
 })
@@ -34,6 +37,9 @@ export class DashboardComponent {
   selectedSemester: string = '';
   selectedQuestion: number = 1; // Default question number
   questions = Array.from({ length: 15 }, (_, i) => i + 1); // 1 to 15
+
+  pendingStudents: any[] = [];
+  allStudentsSubmitted = false;
 
   chartBarData: ChartData<'bar'> = {
     labels: ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5'],
@@ -71,13 +77,33 @@ export class DashboardComponent {
               questionData.option4,
               questionData.option5
             ];
-            this.chartBarData = { ...this.chartBarData }; // Trigger change detection
+            this.chartBarData = { ...this.chartBarData }; 
           }
         },
         error => {
           console.error('Error fetching response data:', error);
         }
       );
+
+      this.surveyService.getPendingStudents(this.selectedBatch, this.selectedSemester).subscribe(
+        (response: any) => {
+          console.log(response)
+          console.log('Pending students:', response.pendingStudents);
+          this.pendingStudents = response.pendingStudents;
+          this.pendingStudents = response.pendingStudents.map((student: any) => ({
+            rollNo: student.RollNo,
+            name: student.username,
+            email: student.email
+          }));
+
+        this.allStudentsSubmitted = this.pendingStudents.length === 0;
+
+        },
+        error => {
+          console.error('Error fetching pending students:', error);
+        }
+      );
+    
     }
   }
 }

@@ -1,6 +1,7 @@
 const express = require('express');
 const ResponseQuestion = require('../models/responseQuestion');
 const Response =  require('../models/response');
+const User = require('../models/users');
 
 const router = express.Router();
 const app = express();
@@ -118,15 +119,38 @@ app.post('/submit-survey', async (req, res) => {
   }
 });
 
+
+app.get('/pending-students', async (req, res) => {
+  const { batch, semester } = req.query;
+
+  try {
+    // Fetch all students of the selected batch
+    const allStudents = await User.find({ batch }).select('RollNo department email username'); // Adjust the fields as needed
+
+    // Fetch students who have submitted the survey
+    const response = await Response.findOne({ batch, semester }).select('students.rollNo');
+    const submittedRollNos = response ? response.students.map(student => student.rollNo) : [];
+
+    // Find students who haven't submitted the survey
+    const pendingStudents = allStudents.filter(student => !submittedRollNos.includes(student.RollNo));
+
+    res.status(200).json({ pendingStudents });
+  } catch (error) {
+    console.error('Error fetching pending students:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get('/responseData', async (req, res) => {
+  console.log("Reached Response Data");
   const { batch, semester, questionNo } = req.query;
 
   if (!batch || !semester || !questionNo) {
+    console.log("missing")
     return res.status(400).json({ message: 'Missing required query parameters' });
   }
 
   try {
-    // Fetch the response data for the given batch, semester, and question number
     const response = await ResponseQuestion.findOne({
       batch,
       semester,
@@ -134,8 +158,10 @@ app.get('/responseData', async (req, res) => {
     }, {
       'questions.$': 1 // Only select the specific question
     });
+    console.log(response);
 
     if (!response) {
+      console.log("error")
       return res.status(404).json({ message: 'No response data found for the given criteria' });
     }
     console.log(response)
@@ -145,6 +171,7 @@ app.get('/responseData', async (req, res) => {
     res.status(500).json({ message: 'Error fetching response data', error: error.message });
   }
 });
+
 
 
 module.exports = app;

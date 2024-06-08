@@ -24,7 +24,7 @@ export const navItems: (INavData & { roles?: string[] })[] = [
       color: 'info',
       text: 'NEW'
     },
-    roles: ['student','faculty']
+    roles: ['student']
   },
   {
     name: 'Create-Survey',

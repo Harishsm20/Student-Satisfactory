@@ -65,5 +65,9 @@ export class SurveyService {
   getResponseData(batch: string, semester: string, questionNo: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/response/responseData?batch=${batch}&semester=${semester}&questionNo=${questionNo}`);
   }
+
+  getPendingStudents(batch: string, semester: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/response/pending-students?batch=${batch}&semester=${semester}`);
+  }
   
 }
