@@ -17,9 +17,12 @@ import { ContainerComponent, RowComponent, ColComponent, CardGroupComponent, Tex
   imports: [ContainerComponent, RowComponent, CommonModule,  ColComponent, ReactiveFormsModule, CardGroupComponent, TextColorDirective, CardComponent, CardBodyComponent, FormDirective, InputGroupComponent, InputGroupTextDirective, IconDirective, FormControlDirective, ButtonDirective, NgStyle]
 })
 export class LoginComponent {
-  loginForm: FormGroup; // Type changed to FormGroup
+  loginForm: FormGroup;
 
-  constructor(private router: Router, private fb: FormBuilder, private registerService: RegisterService) {
+  constructor(private router: Router, 
+  private fb: FormBuilder, 
+  private registerService: RegisterService, 
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -46,10 +49,18 @@ export class LoginComponent {
             console.error("Unexpected response format:", response);
           } else {
             const token = response?.token; 
+            const role = response?.role;
             if (token) { // Check if token exists before storing
               localStorage.setItem('token', token);
               console.log("Login successful:", response);
-              this.router.navigate(['/dashboard']);
+              if (role === 'student') {
+                this.router.navigate(['/questions']);
+              } else if (role === 'faculty') {
+                this.router.navigate(['/dashboard']);
+              } else {
+                // Handle unknown roles or navigate to a default page
+                this.router.navigate(['/']);
+              }
             } else {
               // Handle missing token in response
               console.error("Missing token in response:", response);

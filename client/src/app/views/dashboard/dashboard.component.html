@@ -69,6 +69,7 @@
         <th>Roll No</th>
         <th>Name</th>
         <th>Email</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -76,6 +77,12 @@
         <td>{{ student.rollNo }}</td>
         <td>{{ student.name }}</td>
         <td>{{ student.email }}</td>
+        <td>
+          <a [href]="'https://mail.google.com/mail/?view=cm&fs=1&to=' + student.email + '&su=Survey%20Reminder&body=Please%20complete%20the%20survey.'"
+             target="_blank">
+            Send Email
+          </a>
+        </td>
       </tr>
     </tbody>
   </table>

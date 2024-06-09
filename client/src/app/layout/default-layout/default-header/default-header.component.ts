@@ -1,4 +1,6 @@
 import { Component, computed, DestroyRef, inject, Input } from '@angular/core';
+import { Router } from '@angular/router'; 
+
 import {
   AvatarComponent,
   BadgeComponent,
@@ -40,6 +42,8 @@ export class DefaultHeaderComponent extends HeaderComponent {
   readonly #colorModeService = inject(ColorModeService);
   readonly colorMode = this.#colorModeService.colorMode;
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
+  private router: Router = inject(Router);
+
 
   readonly colorModes = [
     { name: 'light', text: 'Light', icon: 'cilSun' },
@@ -72,5 +76,14 @@ export class DefaultHeaderComponent extends HeaderComponent {
 
   @Input() sidebarId: string = 'sidebar1';
 
+
+  logout() {
+    localStorage.removeItem('authToken');  
+    sessionStorage.clear();
+
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload();
+    });
+  }
 
 }

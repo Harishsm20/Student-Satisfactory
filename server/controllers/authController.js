@@ -19,7 +19,8 @@ router.post('/login', async (req, res) => {
           const token = jwt.sign({ userId: user._id, role: user.role,  rollNo: user.RollNo, batch: user.batch }, secretKey, { expiresIn: '1h' }); 
           console.log(token);
           return res.json({
-            success: true, 
+            success: true,
+            role:role, 
             message: 'Authentication successful',
             token, 
           }); 
@@ -63,13 +64,10 @@ router.post('/register', async (req, res) => {
       batch, 
     });
 
-    // Log the new user data before saving
     console.log("Saving new user:", newUser);
 
-    // Save the new user to the database
     const savedUser = await newUser.save();
 
-    // Send the saved user object as response
     res.json(savedUser);
 
   } catch (err) {
