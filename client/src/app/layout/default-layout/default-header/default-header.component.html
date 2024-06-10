@@ -1,4 +1,3 @@
-<!--<c-header class="mb-4 d-print-none" position="sticky">-->
 <ng-container>
   <c-container [fluid]="true" class="border-bottom px-4">
     <button
@@ -11,17 +10,22 @@
       <svg cIcon name="cilMenu" size="lg"></svg>
     </button>
     <c-header-nav class="d-none d-md-flex">
-      <c-nav-item>
-        <a cNavLink routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-      </c-nav-item>
-      <c-nav-item>
-        <a cNavLink routerLink="/survey" routerLinkActive="active">Create-Survey</a>
-      </c-nav-item>
-
+      <ng-container *ngIf="userRole === 'faculty'">
+        <c-nav-item>
+          <a cNavLink routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        </c-nav-item>
+        <c-nav-item>
+          <a cNavLink routerLink="/survey" routerLinkActive="active">Create-Survey</a>
+        </c-nav-item>
+      </ng-container>
+      <ng-container *ngIf="userRole === 'student'">
+        <c-nav-item>
+          <a cNavLink routerLink="/questions" routerLinkActive="active">Submit survey</a>
+        </c-nav-item>
+      </ng-container>
     </c-header-nav>
 
-    <c-header-nav class="d-none d-md-flex ms-auto ">
-      
+    <c-header-nav class="d-none d-md-flex ms-auto">
     </c-header-nav>
 
     <c-header-nav class="ms-auto ms-md-0">
@@ -37,13 +41,11 @@
     <c-header-nav class="mx-0">
       <ng-container *ngTemplateOutlet="userDropdown" />
     </c-header-nav>
-
   </c-container>
   <c-container [fluid]="true" class="px-4">
     <c-breadcrumb-router />
   </c-container>
 </ng-container>
-<!--</c-header>-->
 
 <ng-template #userDropdown>
   <c-dropdown [popperOptions]="{ placement: 'bottom-start' }" variant="nav-item">
@@ -57,7 +59,6 @@
       />
     </button>
     <ul cDropdownMenu class="pt-0 w-auto">
-      
       <li>
         <a cDropdownItem routerLink="" (click)="logout()">
           <svg cIcon class="me-2" name="cilAccountLogout"></svg>

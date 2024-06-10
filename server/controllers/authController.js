@@ -16,22 +16,27 @@ router.post('/login', async (req, res) => {
         if (user.password === password) {
           role = user.role;
           console.log(`Login Success : ${role}`);
-          const token = jwt.sign({ userId: user._id, role: user.role,  rollNo: user.RollNo, batch: user.batch }, secretKey, { expiresIn: '1h' }); 
+          const token = jwt.sign({ userId: user._id, role: user.role, rollNo: user.RollNo, batch: user.batch }, secretKey, { expiresIn: '1h' }); 
           console.log(token);
           return res.json({
             success: true,
-            role:role, 
+            role: role, 
             message: 'Authentication successful',
             token, 
           }); 
-        
         } else {
-          res.json("Password is incorrect");
-          console.log("Login Failed");
+          res.json({
+            success: false,
+            message: 'Password is incorrect'
+          });
+          console.log("Login Failed: Password is incorrect");
         }
       } else {
-        res.json("Record not found");
-        console.log("No record");
+        res.json({
+          success: false,
+          message: 'Record not found'
+        });
+        console.log("Login Failed: No record");
       }
     });
 });

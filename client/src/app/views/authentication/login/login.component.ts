@@ -18,6 +18,7 @@ import { ContainerComponent, RowComponent, ColComponent, CardGroupComponent, Tex
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  alertMessage: string | null = null; 
 
   constructor(private router: Router, 
   private fb: FormBuilder, 
@@ -45,12 +46,10 @@ export class LoginComponent {
     this.registerService.login(requestBody)
       .subscribe({
         next: (response) => {
-          if (typeof response === 'string') {
-            console.error("Unexpected response format:", response);
-          } else {
-            const token = response?.token; 
-            const role = response?.role;
-            if (token) { // Check if token exists before storing
+          if (response.success) {
+            const token = response.token;
+            const role = response.role;
+            if (token) {
               localStorage.setItem('token', token);
               console.log("Login successful:", response);
               if (role === 'student') {
@@ -58,20 +57,23 @@ export class LoginComponent {
               } else if (role === 'faculty') {
                 this.router.navigate(['/dashboard']);
               } else {
-                // Handle unknown roles or navigate to a default page
                 this.router.navigate(['/']);
               }
             } else {
-              // Handle missing token in response
+              this.alertMessage = "Missing token in response";
               console.error("Missing token in response:", response);
-              // Display user-friendly error message
             }
+          } else {
+            this.alertMessage = response.message; // Set alert message based on response
+            console.error("Login failed:", response.message);
           }
         },
         error: (error) => {
+          this.alertMessage = "Login error occurred"; // Set generic error message
           console.error("Login error:", error);
         }
       });
   }
 }
+
   

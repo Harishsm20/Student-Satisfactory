@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ChartData } from 'chart.js';
 import { CollapseDirective, CollapseModule, ButtonDirective } from '@coreui/angular';
 import { RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent } from '@coreui/angular';
@@ -7,6 +7,11 @@ import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { SurveyService } from '../../service/survey.service'; // Adjust the path as needed
 import { FormsModule } from '@angular/forms'; // For ngModel
 import { CommonModule } from '@angular/common';
+
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+
+import { JwtService } from 'src/app/service/jwt.service';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -29,9 +34,22 @@ import { CommonModule } from '@angular/common';
     CommonModule
 
   ],
-  providers: [SurveyService]
+  providers: [SurveyService, 
+    { provide: JWT_OPTIONS, useValue: {} },
+    JwtHelperService, JwtService]
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit{
+
+  constructor(
+    private jwtService: JwtService,
+    private surveyService: SurveyService
+  ) { }
+  userRole: string ='';
+  ngOnInit(): void {
+    this.userRole = this.jwtService.getRole(); 
+  }
+
+
   visible = false;
   selectedBatch: string = '';
   selectedSemester: string = '';
@@ -56,7 +74,7 @@ export class DashboardComponent {
     maintainAspectRatio: false,
   };
 
-  constructor(private surveyService: SurveyService) {}
+  // constructor() {}
 
   toggleCollapse(): void {
     this.visible = !this.visible;

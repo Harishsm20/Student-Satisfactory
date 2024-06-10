@@ -84,7 +84,7 @@ export class CreateSurveyComponent implements OnInit {
         alert('<div class="alert alert-success" role="alert">Survey created successfully!</div>');
         setTimeout(() => {
           this.surveyForm.reset();
-          this.router.navigate(['/survey']); // Navigate to a specific route (e.g., surveys list)
+          this.router.navigate(['/survey']); 
         }, 100); 
       }, error => {
         console.error('Error creating survey:', error);

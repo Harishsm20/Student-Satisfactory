@@ -1,3 +1,6 @@
+<div *ngIf="userRole === 'faculty'; else unauthorizedContent">
+
+
 <div class="dropdown mb-3" style="width: 50%;">
   <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" aria-haspopup="true" aria-expanded="false" style="width: 15%;" (click)="toggleCollapse()">
     Filter
@@ -87,3 +90,10 @@
     </tbody>
   </table>
 </div>
+</div>
+
+<ng-template #unauthorizedContent>
+  <div class="alert alert-danger" role="alert">
+    You are not authorized to access this page.
+  </div>
+</ng-template>
