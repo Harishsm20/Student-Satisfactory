@@ -1,4 +1,8 @@
 <div *ngIf="userRole === 'faculty'; else unauthorizedContent">
+  <!-- <div *ngif = "al"></div> -->
+  <div *ngIf="alertVisible" [ngClass]="{'alert-success': alertType === true, 'alert-danger': alertType === false}" class="alert" role="alert">
+    {{ alertMessage }}
+  </div>
 
 <h2>Create Survey</h2>
 

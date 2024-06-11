@@ -35,6 +35,12 @@ export class CreateSurveyComponent implements OnInit {
   selectedQuestionIds: string[] = [];
   isChecked = false;
 
+
+
+  alertMessage: string = '';
+  alertVisible: boolean = false;
+  alertType : boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private surveyService: SurveyService,
@@ -81,7 +87,7 @@ export class CreateSurveyComponent implements OnInit {
 
       this.surveyService.createSurvey(surveyData).subscribe(response => {
         console.log('Survey created successfully!', response);
-        alert('<div class="alert alert-success" role="alert">Survey created successfully!</div>');
+        this.showAlert('Survey created successfully!', true);
         setTimeout(() => {
           this.surveyForm.reset();
           this.router.navigate(['/survey']); 
@@ -90,9 +96,18 @@ export class CreateSurveyComponent implements OnInit {
         console.error('Error creating survey:', error);
       });
     } else {
-      alert('Please fill in all required fields and select at least one question.');
+      this.showAlert('Please fill in all required fields and select at least one question.', false);
       console.error('Please fill in all required fields and select at least one question.');
     }
+  }
+
+  showAlert(message: string, sign : boolean): void {
+    this.alertType = sign;
+    this.alertMessage = message;
+    this.alertVisible = true;
+    setTimeout(() => {
+      this.alertVisible = false;
+    }, 5000);
   }
 
   onQuestionSelectionChange(questionId: string = "") {

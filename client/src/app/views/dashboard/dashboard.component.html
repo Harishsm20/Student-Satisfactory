@@ -1,5 +1,8 @@
 <div *ngIf="userRole === 'faculty'; else unauthorizedContent">
 
+  <div *ngIf="alertVisible" class="alert alert-danger" role="alert">
+    {{ alertMessage }}
+  </div>
 
 <div class="dropdown mb-3" style="width: 50%;">
   <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" aria-haspopup="true" aria-expanded="false" style="width: 15%;" (click)="toggleCollapse()">

@@ -59,6 +59,10 @@ export class DashboardComponent implements OnInit{
   pendingStudents: any[] = [];
   allStudentsSubmitted = false;
 
+
+  alertMessage: string = '';
+  alertVisible: boolean = false;
+
   chartBarData: ChartData<'bar'> = {
     labels: ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5'],
     datasets: [
@@ -97,8 +101,14 @@ export class DashboardComponent implements OnInit{
             ];
             this.chartBarData = { ...this.chartBarData }; 
           }
+          else{
+            this.showAlert('Survey not found for the selected filters.');
+
+          }
         },
         error => {
+          this.showAlert('Survey not found for the selected filters.');
+
           console.error('Error fetching response data:', error);
         }
       );
@@ -119,9 +129,18 @@ export class DashboardComponent implements OnInit{
         },
         error => {
           console.error('Error fetching pending students:', error);
+          this.showAlert('Error fetching pending students.');
+
         }
       );
     
     }
+  }
+  showAlert(message: string): void {
+    this.alertMessage = message;
+    this.alertVisible = true;
+    setTimeout(() => {
+      this.alertVisible = false;
+    }, 2000); 
   }
 }

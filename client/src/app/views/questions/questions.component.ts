@@ -45,6 +45,7 @@ export class QuestionsComponent implements OnInit {
 
   alertMessage: string = '';
   alertVisible: boolean = false;
+  alertVisible2: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -114,10 +115,20 @@ export class QuestionsComponent implements OnInit {
         this.filteredSurvey = this.survey;
       } else {
         this.filteredSurvey = null;
+        this.showAlert('The selected semester or survey is closed for submissions.');
+
       }
     } else {
       this.filteredSurvey = null;
+      this.showAlert('Survey not found for the selected semester or survey is closed for submissions.')
+
     }
+  }
+  showAlert(message: string) {
+    this.alertVisible2 = true;
+    setTimeout(() => {
+      this.alertVisible2 = false;
+    }, 1500); 
   }
 
   submitSurvey() {
@@ -153,13 +164,10 @@ export class QuestionsComponent implements OnInit {
         this.alertMessage = `Thankyou for submiiting the survey for ${this.selectedSemester}`;
         this.alertVisible = true;
 
-        console.log('Survey submitted successfully:', response);
-        
-        // Handle successful submission (e.g., navigate to a confirmation page)
+        console.log('Survey submitted successfully:', response);        
       },
       error => {
         console.error('Error submitting survey:', error);
-        // Handle error during submission
       }
     );
   }
