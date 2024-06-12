@@ -125,11 +125,6 @@ export class CreateSurveyComponent implements OnInit {
         }
       }
     }
-     // if(this.selectedQuestionIds.length>0){
-    //   console.table(this.selectedQuestionIds);
-    // }
-    // else{
-    //   console.log("Empty array");
-    // }
+
   }
 }

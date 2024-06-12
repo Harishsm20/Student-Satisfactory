@@ -35,7 +35,7 @@ app.use(cors({ origin: 'http://localhost:4200' }));
 app.use(bodyParser.json());
 
 // Use controllers for routing
-app.use('/auth', authController); // Use authController for /auth routes
+app.use('/auth', authController); 
 app.use('/surveys',surveyController);
 app.use('/questions',questionController);
 app.use('/response',responseController);

@@ -12,6 +12,7 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   User.findOne({ email: email })
     .then(user => {
+      console.log(user);
       if (user) {
         if (user.password === password) {
           role = user.role;

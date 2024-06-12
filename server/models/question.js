@@ -12,7 +12,7 @@ const questionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  options: [optionSchema], // Array of option subdocuments
+  options: [optionSchema],
 });
 
 const Question = mongoose.model('Question', questionSchema);

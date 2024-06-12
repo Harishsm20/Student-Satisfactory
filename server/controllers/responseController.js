@@ -5,7 +5,7 @@ const User = require('../models/users');
 
 const router = express.Router();
 const app = express();
-app.use(express.json()); // Ensure JSON parsing middleware
+app.use(express.json());
 
 
 app.post('/submitStudentResponse', async (req, res) => {
@@ -14,7 +14,6 @@ app.post('/submitStudentResponse', async (req, res) => {
   try {
     console.log(`Received request to submit survey for batch: ${batch}, semester: ${semester}, studentRollNo: ${studentRollNo}`);
 
-    // Check if the student has already submitted the survey for the given batch and semester
     const existingStudentResponse = await Response.findOne({ batch, semester, 'students.rollNo': studentRollNo });
 
     if (existingStudentResponse) {
@@ -41,13 +40,11 @@ app.post('/submitStudentResponse', async (req, res) => {
 
 // Submit a survey response (student only)
 app.post('/submit-survey', async (req, res) => {
-  console.log('Reached /submit-survey');
   
-  // Log the entire questions object
   console.log('Received questions:', JSON.stringify(req.body.questions, null, 2));
   
   try {
-    // Validate required properties
+
     const { questions, batch, semester } = req.body;
 
     if (!questions || !batch || !semester) {
@@ -55,13 +52,11 @@ app.post('/submit-survey', async (req, res) => {
       return res.status(400).json({ message: 'Missing required survey data' });
     }
 
-    // Check for existing response for the given batch and semester
     let existingResponse = await ResponseQuestion.findOne({ batch, semester });
 
     if (existingResponse) {
       console.log("Already existing data found");
 
-      // Update options in existing response for submitted questions
       for (const submittedQuestion of questions) {
         const existingQuestion = existingResponse.questions.find(q => q.questionNo === submittedQuestion.questionNo);
 
@@ -73,7 +68,6 @@ app.post('/submit-survey', async (req, res) => {
             }
           }
         } else {
-          // If the question doesn't exist in the current response, add it
           const newQuestion = {
             questionNo: submittedQuestion.questionNo,
             text: submittedQuestion.text,
@@ -87,7 +81,6 @@ app.post('/submit-survey', async (req, res) => {
         }
       }
 
-      // Save the updated response
       await existingResponse.save();
 
       res.status(200).json({ message: 'Survey response updated successfully' });

@@ -5,23 +5,6 @@ const Question = require('../models/question'); // Needed for adding questions
 
 const router = express.Router();
 
-// Function to add questions to survey
-const addQuestionsToSurvey = async (surveyId, questionIds) => {
-  try {
-    const survey = await Survey.findById(surveyId);
-    if (!survey) {
-      throw new Error('Survey not found!');
-    }
-    // Assuming questions is an array field in the survey model
-    survey.questions.push(...questionIds);
-    await survey.save();
-    console.log('Questions added to survey successfully!');
-  } catch (error) {
-    console.error('Error adding questions to survey:', error);
-    throw error;
-  }
-};
-
 // Create a survey (faculty only)
 router.post('/createSurvey', async (req, res) => {
   console.log(`REQUEST BODY: ${JSON.stringify(req.body, null, 2)}`);
@@ -35,18 +18,13 @@ router.post('/createSurvey', async (req, res) => {
       faculty,
       questions,
     });
-    // console.log(newSurvey);
     await newSurvey.save();
-    // await addQuestionsToSurvey(newSurvey._id, questionIds); // Add questions to survey
     console.log(`Survey create successfully in db`);
     res.status(201).send({ message: 'Survey created successfully!', survey: newSurvey });
   } catch (err) {
-    // console.log(`error: ${err.message}`)
     res.status(400).send({ error: err.message });
   }
 });
-
-// Get all surveys (filter by faculty or active status)
 
 
 // Get a specific survey by Batch
@@ -71,7 +49,7 @@ router.get('/getSurveyByBatch/:batch', async (req, res) => {
 
 // Submit a survey response (student only) - Added functionality
 router.post('/submitResponse', async (req, res) => {
-  const student = req.user; // Assuming user data is available from JWT
+  const student = req.user; 
   const { surveyId, answers } = req.body;
   try {
     if (!student || student.role !== 'student') {
@@ -88,7 +66,7 @@ router.post('/submitResponse', async (req, res) => {
     const newResponse = new Response({
       student: student._id,
       survey: surveyId,
-      answers, // Object containing student's answer for each question (linked to question IDs)
+      answers, 
     });
     await newResponse.save();
     res.status(201).send({ message: 'Survey response submitted successfully!' });
