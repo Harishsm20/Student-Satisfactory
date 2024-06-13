@@ -28,10 +28,11 @@ router.post('/createSurvey', async (req, res) => {
 
 
 // Get a specific survey by Batch
-router.get('/getSurveyByBatch/:batch', async (req, res) => {
+router.get('/getSurveyByBatch/:batch/:semester', async (req, res) => {
   const batch = req.params.batch;
+  const semester = req.params.semester;
   try { 
-    const survey = await Survey.findOne({ batch: batch })
+    const survey = await Survey.findOne({ batch: batch, semester: semester })
       .populate('faculty')
       .populate('questions');
 

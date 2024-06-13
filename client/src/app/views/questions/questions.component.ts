@@ -58,18 +58,21 @@ export class QuestionsComponent implements OnInit {
     this.fetchAvailableQuestions();
     this.userBatch = this.jwtService.getbatch(); 
     this.userRole = this.jwtService.getRole();
-    this.fetchSurvey();
+    // this.fetchSurvey();
   }
 
   fetchSurvey() {
-    this.surveyService.getSurveyByBatch(this.userBatch)
+    this.surveyService.getSurveyByBatch(this.userBatch, this.selectedSemester)
       .subscribe(
         response => {
           this.survey = response;
-          console.log('Survey response:', response);
+          console.log('Survey response:', this.survey);
           this.checkSurveyDates();
+          this.applyFilters();
         },
         error => {
+          this.showAlert('The selected semester or survey is closed for submissions.');
+
           console.error('Error fetching survey:', error);
           // Handle error accordingly
         }
@@ -81,11 +84,14 @@ export class QuestionsComponent implements OnInit {
     const startDate = new Date(this.survey.startDate);
     const endDate = new Date(this.survey.endDate);
 
+    console.log(currentDate);
     if (currentDate >= startDate && currentDate <= endDate) {
       
       this.isSurveyOpen = this.selectedSemester === this.survey.semester;
+      console.log(this.isSurveyOpen);
     } else {
       this.isSurveyOpen = false;
+      console.log("SIuuuu")
     }
   }
 
@@ -105,12 +111,14 @@ export class QuestionsComponent implements OnInit {
 
   onSemesterChange(value: string) {
     this.selectedSemester = value;
-    this.applyFilters();
+    this.fetchSurvey();
   }
 
   applyFilters() {
+    console.log(`this.survey: ${this.survey}`);
     if (this.survey && this.survey.semester === this.selectedSemester) {
       this.checkSurveyDates();
+      console.log(` \n\napply filter : ${this.survey}`)
       if (this.isSurveyOpen) {
         this.filteredSurvey = this.survey;
       } else {
@@ -128,7 +136,7 @@ export class QuestionsComponent implements OnInit {
     this.alertVisible2 = true;
     setTimeout(() => {
       this.alertVisible2 = false;
-    }, 1500); 
+    }, 2000); 
   }
 
   submitSurvey() {
@@ -179,6 +187,8 @@ export class QuestionsComponent implements OnInit {
       semester: this.selectedSemester,
       studentRollNo: this.jwtService.getRollNo()
     };
+
+    console.log(studentResponse);
   
     this.surveyService.submitStudentResponse(studentResponse).subscribe(
       response => {
