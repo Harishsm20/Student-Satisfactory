@@ -93,6 +93,11 @@ export class CreateSurveyComponent implements OnInit {
           this.router.navigate(['/survey']); 
         }, 100); 
       }, error => {
+        if (error.status === 400 && error.error.message === 'Survey for this batch and semester already exists.') {
+          this.showAlert('Survey for this batch and semester already exists.', false);
+        } else {
+          this.showAlert('Error creating survey. Please try again.', false);
+        }
         console.error('Error creating survey:', error);
       });
     } else {

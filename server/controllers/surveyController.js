@@ -9,7 +9,15 @@ const router = express.Router();
 router.post('/createSurvey', async (req, res) => {
   console.log(`REQUEST BODY: ${JSON.stringify(req.body, null, 2)}`);
   const { batch, semester, startDate, endDate, questions, faculty } = req.body;
+  
+
   try {
+
+    const existingSurvey = await Survey.findOne({ batch, semester });
+    if (existingSurvey) {
+        return res.status(400).send({ message: 'Survey for this batch and semester already exists.' });
+    }
+
     const newSurvey = new Survey({
       batch,
       semester,
