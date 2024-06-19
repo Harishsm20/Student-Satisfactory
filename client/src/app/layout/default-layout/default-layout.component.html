@@ -6,14 +6,20 @@
   id="sidebar1"
   visible
 >
-  <!--  Create a new logo after that we can updtae this
+  <!--  Create a new logo after that we can updtae this -->
 
 <c-sidebar-header class="border-bottom">
-    <c-sidebar-brand [routerLink]="[]">
+    <!-- <c-sidebar-brand [routerLink]="[]">
       <svg [class]="{icon: false}" cIcon class="sidebar-brand-full" height="32" name="logo" title="CoreUI Logo"></svg>
+       SSS
       <svg cIcon class="sidebar-brand-narrow" height="32" name="signet" title="CoreUI Logo"></svg>
-    </c-sidebar-brand>
-  </c-sidebar-header> -->
+    </c-sidebar-brand> -->
+
+    <div class="centered-content">
+      <h1 class="centered-heading">SSS</h1>
+      <p class="centered-paragraph">Student Satisfactory Survey</p>
+  </div>
+  </c-sidebar-header>
 
   <ng-scrollbar #scrollbar="ngScrollbar"  class="overflow" pointerEventsMethod="scrollbar" visibility="hover">
     <c-sidebar-nav #overflow [navItems]="navItems" dropdownMode="close" compact />
