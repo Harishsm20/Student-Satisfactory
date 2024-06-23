@@ -4,56 +4,12 @@
       {{ alertMessage }}
     </div>
   
-  <div class="dropdown mb-3" style="width: 50%;">
-    <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" aria-haspopup="true" aria-expanded="false" style="width: 15%;" (click)="toggleCollapse()">
-      Filter
-    </button>
-    <div [visible]="visible" cCollapse class="dropdown-menu" id="dropdownMenu" aria-labelledby="filterDropdown" style="width: 75%; padding: 1em;">
-      <!-- Filters Selections -->
-      <div class="form-group" style="margin-bottom: 10px;">
-        <label for="batchFilter">Batch:</label>
-        <select id="batchFilter" class="form-control" [(ngModel)]="selectedBatch">
-          <option value="" disabled selected>Select the Batch</option>
-          <option value="2020">2020</option>
-          <option value="2021">2021</option>
-          <option value="2022">2022</option>
-          <option value="2023">2023</option>
-        </select>
-      </div>
-    
-      <div class="form-group" style="margin-bottom: 10px;">
-        <label for="semesterFilter">Semester:</label>
-        <select id="semesterFilter" class="form-control" [(ngModel)]="selectedSemester">
-          <option value="" disabled selected>Select the Semester</option>
-          <option value="Semester1">Semester 1</option>
-          <option value="Semester2">Semester 2</option>
-          <option value="Semester3">Semester 3</option>
-          <option value="Semester4">Semester 4</option>
-          <option value="Semester5">Semester 5</option>
-          <option value="Semester6">Semester 6</option>
-          <option value="Semester7">Semester 7</option>
-          <option value="Semester8">Semester 8</option>
-        </select>
-      </div>
-    
-      <div class="form-group" style="margin-bottom: 10px;">
-        <label for="questionFilter">Questions:</label>
-        <select id="questionFilter" class="form-control" [(ngModel)]="selectedQuestion">
-          <option value="" disabled selected>Select the Question</option>
-          <option value="1">Question 1</option>
-          <option value="2">Question 2</option>
-        </select>
-      </div>
-    
-      <!-- Apply Filters Button -->
-      <button class="btn btn-primary" (click)="applyFilters()">Apply Filters</button>
-    </div>     
-  </div>
+
   
   <c-col xs="24" lg="10">
     <c-card class="mb-4">
       <c-card-header>
-        Student Survey
+        Profile
       </c-card-header>
       <c-card-body>
         <c-chart type="bar" [data]="chartBarData" [options]="chartBarOptions"></c-chart>
@@ -63,8 +19,7 @@
   
   <!-- Pending Students Table -->
   <div *ngIf="allStudentsSubmitted" class="alert alert-success" role="alert">
-    All students have submitted the survey successfully!
-  </div>
+Name  </div>
   <div *ngIf="pendingStudents.length > 0" class="mt-4">
     <h3>Students Who Haven't Submitted the Survey</h3>
     <table class="table table-bordered">
