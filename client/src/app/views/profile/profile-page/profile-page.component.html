@@ -1,55 +1,79 @@
-<div *ngIf="userRole === 'faculty'; else unauthorizedContent">
+<div class="container">
 
-    <div *ngIf="alertVisible" class="alert alert-danger" role="alert">
+  <!-- Alert Message -->
+  <div *ngIf="alertVisible" class="alert alert-danger" role="alert">
       {{ alertMessage }}
-    </div>
-  
+  </div>
 
-  
-  <c-col xs="24" lg="10">
-    <c-card class="mb-4">
-      <c-card-header>
-        Profile
-      </c-card-header>
-      <c-card-body>
-        <c-chart type="bar" [data]="chartBarData" [options]="chartBarOptions"></c-chart>
-      </c-card-body>
-    </c-card>
-  </c-col>
-  
+  <!-- Profile Card -->
+  <div class="row justify-content-center">
+      <div class="col-12 col-lg-8">
+          <div class="card mb-4">
+              <div class="card-header">
+                  Profile
+              </div>
+              <div class="card-body">
+                  <div class="row">
+                      <div class="col-4 text-right">
+                          <strong>Name:</strong>
+                      </div>
+                      <div class="col-8">
+                          {{ user.name }}
+                      </div>
+                  </div>
+                  <div class="row mt-3">
+                      <div class="col-4 text-right">
+                          <strong>Email:</strong>
+                      </div>
+                      <div class="col-8">
+                          {{ user.email }}
+                      </div>
+                  </div>
+                  <div class="row mt-3">
+                      <div class="col-4 text-right">
+                          <strong>Batch:</strong>
+                      </div>
+                      <div class="col-8">
+                          {{ user.batch }}
+                      </div>
+                  </div>
+                  <div class="row mt-3">
+                      <div class="col-4 text-right">
+                          <strong>Role:</strong>
+                      </div>
+                      <div class="col-8">
+                          {{ user.role }}
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Chart -->
+  <div class="row justify-content-center">
+      <div class="col-12 col-lg-8">
+          <div class="card mb-4">
+              <div class="card-header">
+                  Survey Performance
+              </div>
+              <div class="card-body">
+                  <c-chart type="bar" [data]="chartBarData" [options]="chartBarOptions"></c-chart>
+              </div>
+          </div>
+      </div>
+  </div>
+
   <!-- Pending Students Table -->
   <div *ngIf="allStudentsSubmitted" class="alert alert-success" role="alert">
-Name  </div>
-  <div *ngIf="pendingStudents.length > 0" class="mt-4">
-    <h3>Students Who Haven't Submitted the Survey</h3>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Roll No</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let student of pendingStudents">
-          <td>{{ student.rollNo }}</td>
-          <td>{{ student.name }}</td>
-          <td>{{ student.email }}</td>
-          <td>
-            <a [href]="'https://mail.google.com/mail/?view=cm&fs=1&to=' + student.email + '&su=Survey%20Reminder&body=Please%20complete%20the%20survey.'"
-               target="_blank">
-              Send Email
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      All students have submitted the survey.
   </div>
-  </div>
-  
-  <ng-template #unauthorizedContent>
-    <div class="alert alert-danger" role="alert">
+
+</div>
+
+<!-- Unauthorized Content -->
+<ng-template #unauthorizedContent>
+  <div class="alert alert-danger" role="alert">
       You are not authorized to access this page.
-    </div>
-  </ng-template>
+  </div>
+</ng-template>
