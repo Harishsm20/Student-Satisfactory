@@ -1,146 +1,58 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartData } from 'chart.js';
-import { CollapseDirective, CollapseModule, ButtonDirective } from '@coreui/angular';
-import { RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent } from '@coreui/angular';
-import { DocsCalloutComponent } from '@docs-components/public-api';
-import { ChartjsComponent } from '@coreui/angular-chartjs';
-import { SurveyService } from '../../../service/survey.service'; 
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-
-import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
-
-import { JwtService } from 'src/app/service/jwt.service';
-
+import { SurveyService } from '../../../service/survey.service';
+import { JwtService } from '../../../service/jwt.service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  standalone: true,
-  imports: [
-    RowComponent,
-    ButtonDirective,
-    CardBodyComponent,
-    CollapseModule,
-    CollapseDirective,
-    ColComponent,
-    DocsCalloutComponent,
-    TextColorDirective,
-    CardComponent,
-    CardHeaderComponent,
-    ChartjsComponent,
-    FormsModule, // For ngModel
-    CommonModule
-
-  ],
-  providers: [SurveyService, 
-    { provide: JWT_OPTIONS, useValue: {} },
-    JwtHelperService, JwtService]
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss']
 })
-export class DashboardComponent implements OnInit{
-
-  constructor(
-    private jwtService: JwtService,
-    private surveyService: SurveyService
-  ) { }
-  userRole: string ='';
-  ngOnInit(): void {
-    this.userRole = this.jwtService.getRole(); 
-  }
-
-
-  visible = false;
-  selectedBatch: string = '';
-  selectedSemester: string = '';
-  selectedQuestion: number = 1; // Default question number
-  questions = Array.from({ length: 15 }, (_, i) => i + 1); // 1 to 15
-
-  pendingStudents: any[] = [];
-  allStudentsSubmitted = false;
-
-
+export class ProfileComponent implements OnInit {
+  user: any = {};  // Replace with proper user model
   alertMessage: string = '';
   alertVisible: boolean = false;
+  allStudentsSubmitted: boolean = false;
+  chartBarData: any;
+  chartBarOptions: any;
 
-  chartBarData: ChartData<'bar'> = {
-    labels: ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5'],
-    datasets: [
-      {
-        label: 'Survey Points',
-        backgroundColor: '#f87979',
-        data: [] // Initialize with an empty array
+  constructor(
+    private surveyService: SurveyService,
+    private jwtService: JwtService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    this.fetchUserProfile();
+    this.initializeChart();
+  }
+
+  fetchUserProfile() {
+    this.user = this.jwtService.getRole();  
+  }
+
+  initializeChart() {
+    this.chartBarData = {
+      labels: ['Survey 1', 'Survey 2', 'Survey 3'],
+      datasets: [
+        {
+          label: 'Scores',
+          data: [65, 59, 80],
+          backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+          borderColor: ['rgba(75, 192, 192, 1)'],
+          borderWidth: 1
+        }
+      ]
+    };
+
+    this.chartBarOptions = {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
       }
-    ]
-  };
-
-  chartBarOptions = {
-    maintainAspectRatio: false,
-  };
-
-  // constructor() {}
-
-  toggleCollapse(): void {
-    this.visible = !this.visible;
-  }
-
-  applyFilters(): void {
-    if (this.selectedBatch && this.selectedSemester && this.selectedQuestion) {
-      console.log(`${this.selectedBatch}, ${this.selectedQuestion}, ${this.selectedSemester}`);
-      this.surveyService.getResponseData(this.selectedBatch, this.selectedSemester, this.selectedQuestion).subscribe(
-        response => {
-          console.log(response);
-          if (response && response.questions && response.questions.length > 0) {
-            const questionData = response.questions[0];
-            this.chartBarData.datasets[0].data = [
-              questionData.option1,
-              questionData.option2,
-              questionData.option3,
-              questionData.option4,
-              questionData.option5
-            ];
-            this.chartBarData = { ...this.chartBarData }; 
-          }
-          else{
-            this.showAlert('Survey not found for the selected filters.');
-
-          }
-        },
-        error => {
-          this.showAlert('Survey not found for the selected filters.');
-
-          console.error('Error fetching response data:', error);
-        }
-      );
-
-      this.surveyService.getPendingStudents(this.selectedBatch, this.selectedSemester).subscribe(
-        (response: any) => {
-          console.log(response)
-          console.log('Pending students:', response.pendingStudents);
-          this.pendingStudents = response.pendingStudents;
-          this.pendingStudents = response.pendingStudents.map((student: any) => ({
-            rollNo: student.RollNo,
-            name: student.username,
-            email: student.email
-          }));
-
-        this.allStudentsSubmitted = this.pendingStudents.length === 0;
-
-        },
-        error => {
-          console.error('Error fetching pending students:', error);
-          this.showAlert('Error fetching pending students.');
-
-        }
-      );
-    
-    }
-  }
-  showAlert(message: string): void {
-    this.alertMessage = message;
-    this.alertVisible = true;
-    setTimeout(() => {
-      this.alertVisible = false;
-    }, 2000); 
+    };
   }
 }
