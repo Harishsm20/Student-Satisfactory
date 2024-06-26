@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SurveyService } from '../../../service/survey.service';
-import { JwtService } from '../../../service/jwt.service';
+import { SurveyService } from '../../service/survey.service';
+import { JwtService } from '../../service/jwt.service';
 import { Router } from '@angular/router';
 
 @Component({

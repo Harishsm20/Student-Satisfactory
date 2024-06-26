@@ -30,6 +30,10 @@ export const routes: Routes = [
       {
         path: 'survey',
         loadChildren: () => import('./views/create-survey/routes').then((m) => m.routes)
+      },
+      {
+        path: 'profile',
+        loadChildren: () => import('./views/profile-page/routes').then((m) => m.routes)
       }
     ]
   },
