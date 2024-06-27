@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { SurveyService } from '../../service/survey.service';
 import { JwtService } from '../../service/jwt.service';
 import { Router } from '@angular/router';
+import { ChartComponent } from 'chart.js';
 
 @Component({
   selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  templateUrl: './profile-page.component.html',
+  styleUrls: ['./profile-page.component.scss']
 })
 export class ProfileComponent implements OnInit {
   user: any = {};  // Replace with proper user model

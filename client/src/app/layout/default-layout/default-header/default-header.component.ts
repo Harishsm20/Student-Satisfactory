@@ -98,4 +98,8 @@ export class DefaultHeaderComponent extends HeaderComponent  {
     });
   }
 
+  navigateToProfile() {
+    this.router.navigate(['/profile']);
+  }
+
 }
