@@ -1,16 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { SurveyService } from '../../service/survey.service';
-import { JwtService } from '../../service/jwt.service';
-import { Router } from '@angular/router';
-import { ChartComponent } from 'chart.js';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { JwtService } from 'src/app/service/jwt.service';import { Router } from '@angular/router';
+import { NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
+
+
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile-page.component.html',
-  styleUrls: ['./profile-page.component.scss']
+  styleUrls: ['./profile-page.component.scss'],
+  imports: [HttpClientModule,CommonModule],
+  standalone: true,
+  providers: [{ provide: JWT_OPTIONS, useValue: {} },
+    JwtHelperService, JwtService]
+
 })
 export class ProfileComponent implements OnInit {
-  user: any = {};  // Replace with proper user model
+  
+  user: any = {};  
   alertMessage: string = '';
   alertVisible: boolean = false;
   allStudentsSubmitted: boolean = false;
@@ -18,36 +27,37 @@ export class ProfileComponent implements OnInit {
   chartBarOptions: any;
 
   constructor(
-    private surveyService: SurveyService,
     private jwtService: JwtService,
-    private router: Router
+
+
   ) { }
 
   ngOnInit(): void {
     this.fetchUserProfile();
-    this.initializeChart();
+    this.loadChart();
+    console.log("Reached profile");
   }
 
   fetchUserProfile() {
-    this.user = this.jwtService.getRole();  
+    this.user = this.jwtService.getRole(); 
+
   }
 
-  initializeChart() {
-    this.chartBarData = {
-      labels: ['Survey 1', 'Survey 2', 'Survey 3'],
-      datasets: [
-        {
-          label: 'Scores',
-          data: [65, 59, 80],
-          backgroundColor: ['rgba(75, 192, 192, 0.2)'],
-          borderColor: ['rgba(75, 192, 192, 1)'],
-          borderWidth: 1
-        }
-      ]
-    };
+  loadChart() {
+    // Example method to load chart data
+    this.chartBarData = [
+      { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
+      { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' }
+    ];
 
     this.chartBarOptions = {
+      responsive: true,
       scales: {
+        xAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }],
         yAxes: [{
           ticks: {
             beginAtZero: true
@@ -57,3 +67,6 @@ export class ProfileComponent implements OnInit {
     };
   }
 }
+
+  
+

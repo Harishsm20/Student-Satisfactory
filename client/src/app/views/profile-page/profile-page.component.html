@@ -1,12 +1,14 @@
 <div class="container">
 
+    <h1>Profile page</h1>
+
   <!-- Alert Message -->
-  <div *ngIf="alertVisible" class="alert alert-danger" role="alert">
+  <!-- <div *ngIf="alertVisible" class="alert alert-danger" role="alert">
       {{ alertMessage }}
-  </div>
+  </div> -->
 
   <!-- Profile Card -->
-  <div class="row justify-content-center">
+  <!-- <div class="row justify-content-center">
       <div class="col-12 col-lg-8">
           <div class="card mb-4">
               <div class="card-header">
@@ -48,20 +50,14 @@
               </div>
           </div>
       </div>
-  </div>
+  </div> -->
 
 
 
   <!-- Pending Students Table -->
-  <div *ngIf="allStudentsSubmitted" class="alert alert-success" role="alert">
+  <!-- <div *ngIf="allStudentsSubmitted" class="alert alert-success" role="alert">
       All students have submitted the survey.
-  </div>
+  </div> -->
 
 </div>
 
-<!-- Unauthorized Content -->
-<ng-template #unauthorizedContent>
-  <div class="alert alert-danger" role="alert">
-      You are not authorized to access this page.
-  </div>
-</ng-template>
