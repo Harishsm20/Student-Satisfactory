@@ -45,5 +45,30 @@ export class JwtService {
     }
     return '';
   }
+
+  public getUserDetails(): { 
+    userId: string, 
+    role: string, 
+    rollNo: string, 
+    batch: string, 
+    name: string, 
+    email: string, 
+    department: string 
+  } | null {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return {
+        userId: decodedToken?.userId || '',
+        role: decodedToken?.role || '',
+        rollNo: decodedToken?.rollNo || '',
+        batch: decodedToken?.batch || '',
+        name: decodedToken?.name || '',
+        email: decodedToken?.email || '',
+        department: decodedToken?.department || ''
+      };
+    }
+    return null;
+  }
 }
 
