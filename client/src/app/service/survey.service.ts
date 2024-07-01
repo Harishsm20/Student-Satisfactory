@@ -5,10 +5,6 @@ import { Observable } from 'rxjs';
 interface Survey {
   _id: string;
   batch: string;
-  // title: string;
-  // description: string;
-  // semester: string;
-  // questionIds: string;
   startDate: Date;
   endDate: Date;
   faculty: any;

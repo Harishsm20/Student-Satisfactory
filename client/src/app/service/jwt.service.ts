@@ -47,7 +47,6 @@ export class JwtService {
   }
 
   public getUserDetails(): { 
-    userId: string, 
     role: string, 
     rollNo: string, 
     batch: string, 
@@ -59,7 +58,6 @@ export class JwtService {
     if (token) {
       const decodedToken = this.jwtHelper.decodeToken(token);
       return {
-        userId: decodedToken?.userId || '',
         role: decodedToken?.role || '',
         rollNo: decodedToken?.rollNo || '',
         batch: decodedToken?.batch || '',

@@ -3,7 +3,8 @@ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtService } from 'src/app/service/jwt.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { FormsModule } from '@angular/forms'; 
+import { ProfileService} from '../../service/profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +13,7 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
   imports: [HttpClientModule, CommonModule, FormsModule], // Add FormsModule to imports
   standalone: true,
   providers: [{ provide: JWT_OPTIONS, useValue: {} },
-    JwtHelperService, JwtService]
+    JwtHelperService, JwtService, ProfileService]
 })
 export class ProfileComponent implements OnInit {
 
@@ -24,8 +25,12 @@ export class ProfileComponent implements OnInit {
   chartBarOptions: any;
   isEditingName: boolean = false;
 
+  showEdit: boolean = false;
+
+
   constructor(
     private jwtService: JwtService,
+    private profileService: ProfileService,
   ) { }
 
   ngOnInit(): void {
@@ -43,6 +48,18 @@ export class ProfileComponent implements OnInit {
     this.isEditingName = !this.isEditingName;
     if (!this.isEditingName) {
       console.log('Name saved:', this.user.name);
+      this.updateUserName(this.user.rollNo, this.user.name);
     }
+  }
+
+  updateUserName(rollNo: string, name: string) {
+    this.profileService.updateUserName(rollNo, name).subscribe(
+      (response: any) => {
+        console.log('Name updated successfully', response);
+      },
+      (error: any) => {
+        console.error('Error updating name', error);
+      }
+    );
   }
 }

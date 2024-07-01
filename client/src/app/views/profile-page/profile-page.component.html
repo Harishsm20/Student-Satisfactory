@@ -1,63 +1,65 @@
 <div class="container">
 
-    <!-- Profile Card -->
-    <div class="row justify-content-center">
-      <div class="col-12 col-lg-8">
-        <div class="card mb-4">
-          <div class="card-header">
-            User Profile
+  <!-- Profile Card -->
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="card mb-4">
+        <div class="card-header">
+          User Profile
+        </div>
+        <div class="card-body">
+          <div class="row mt-3">
+            <div class="col-4 text-right">
+              <strong>Roll Number:</strong>
+            </div>
+            <div class="col-8">
+              {{ user.rollNo }}
+            </div>
           </div>
-          <div class="card-body">
-  
-            <div class="row mt-3">
-              <div class="col-4 text-right">
-                <strong>Roll Number:</strong>
-              </div>
-              <div class="col-8">
-                {{ user.rollNo }}
-              </div>
+          <div class="row mt-3 position-relative name-row" (mouseover)="showEdit = true" (mouseleave)="showEdit = false">
+            <div class="col-4 text-right">
+              <strong>Name:</strong>
             </div>
-            <div class="row mt-3">
-              <div class="col-4 text-right">
-                <strong>Name:</strong>
-              </div>
-              <div class="col-8">
-                <span *ngIf="!isEditingName">{{ user.name }}</span>
-                <input *ngIf="isEditingName" [(ngModel)]="user.name" />
-                <button class="btn btn-sm btn-primary ml-2" (click)="toggleEditName()">
-                  {{ isEditingName ? 'Save' : 'Edit' }}
-                </button>
-              </div>
+            <div class="col-8">
+              <span *ngIf="!isEditingName">{{ user.name }}</span>
+              <input *ngIf="isEditingName" [(ngModel)]="user.name" />
+              <button
+                class="btn btn-sm btn-primary edit-button"
+                *ngIf="showEdit || isEditingName"
+                (click)="toggleEditName()"
+              >
+                {{ isEditingName ? 'Save' : 'Edit' }}
+              </button>
             </div>
-            <div class="row mt-3">
-              <div class="col-4 text-right">
-                <strong>Email:</strong>
-              </div>
-              <div class="col-8">
-                {{ user.email }}
-              </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-4 text-right">
+              <strong>Email:</strong>
             </div>
-            <!-- Conditionally show batch details -->
-            <div class="row mt-3" *ngIf="user.role !== 'faculty'">
-              <div class="col-4 text-right">
-                <strong>Batch:</strong>
-              </div>
-              <div class="col-8">
-                {{ user.batch }}
-              </div>
+            <div class="col-8">
+              {{ user.email }}
             </div>
-            <div class="row mt-3">
-              <div class="col-4 text-right">
-                <strong>Department:</strong>
-              </div>
-              <div class="col-8">
-                {{ user.department }}
-              </div>
+          </div>
+          <!-- Conditionally show batch details -->
+          <div class="row mt-3" *ngIf="user.role !== 'faculty'">
+            <div class="col-4 text-right">
+              <strong>Batch:</strong>
+            </div>
+            <div class="col-8">
+              {{ user.batch }}
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-4 text-right">
+              <strong>Department:</strong>
+            </div>
+            <div class="col-8">
+              {{ user.department }}
             </div>
           </div>
         </div>
       </div>
     </div>
-  
   </div>
-  
+
+</div>

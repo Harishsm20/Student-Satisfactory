@@ -4,10 +4,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
-const authController = require('./controllers/authController'); // Import auth controller
+const authController = require('./controllers/authController'); 
 const surveyController = require('./controllers/surveyController');
 const questionController = require('./controllers/questionController');
 const responseController = require('./controllers/responseController');
+const profileController = require('./controllers/profileController');
 const dotenv = require('dotenv');
 
 
@@ -39,6 +40,7 @@ app.use('/auth', authController);
 app.use('/surveys',surveyController);
 app.use('/questions',questionController);
 app.use('/response',responseController);
+app.use('/profile',profileController);
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

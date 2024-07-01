@@ -1,0 +1,1 @@
+.name-row{position:relative}.name-row .edit-button{position:absolute;right:0;top:50%;transform:translateY(-50%);display:none}.name-row:hover .edit-button,.name-row .edit-button.is-editing{display:block}
