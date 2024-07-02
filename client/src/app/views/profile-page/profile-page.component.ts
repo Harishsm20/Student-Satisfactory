@@ -56,9 +56,19 @@ export class ProfileComponent implements OnInit {
     this.profileService.updateUserName(rollNo, name).subscribe(
       (response: any) => {
         console.log('Name updated successfully', response);
+        this.alertMessage = 'Name updated successfully';
+        this.alertVisible = true;
+        setTimeout(() => {
+          this.alertVisible = false;
+        }, 3000); // Hide the alert after 3 seconds
       },
       (error: any) => {
         console.error('Error updating name', error);
+        this.alertMessage = 'Error updating name';
+        this.alertVisible = true;
+        setTimeout(() => {
+          this.alertVisible = false;
+        }, 3000); // Hide the alert after 3 seconds
       }
     );
   }
