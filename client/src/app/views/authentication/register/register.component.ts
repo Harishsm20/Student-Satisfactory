@@ -2,7 +2,7 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common'; // Add this import
-import { AbstractControl, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors,ValidatorFn } from '@angular/forms';
 import { RegisterService } from '../../../service/auth.service'; // Import your service
 import { User } from '../shared/user.model';
 import { HttpClientModule , HttpClient} from '@angular/common/http';
@@ -10,6 +10,7 @@ import { IconDirective } from '@coreui/icons-angular';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DocsExampleComponent } from '@docs-components/public-api';
 import {  CardHeaderComponent,  FormLabelDirective,  FormFeedbackComponent,  FormSelectDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,  ListGroupDirective, ListGroupItemDirective } from '@coreui/angular';
+
 
 // import {CFormCheckModule} ;
 import { ContainerComponent, RowComponent ,ColComponent, TextColorDirective, CardComponent, CardBodyComponent, FormDirective, InputGroupComponent, InputGroupTextDirective, FormControlDirective, ButtonDirective } from '@coreui/angular';
@@ -34,10 +35,11 @@ export class RegisterComponent {
     password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/)]],
     confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
     RollNo: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(12), this.alphanumericValidator()]],
-    department: ['', [ ]], // Add department property
-  role: ['', [ ]], // Add role property
-  batch: ['', [ ]], // Add role property
-  });
+    department: ['', [ ]], 
+  role: ['', [ ]],
+  batch: ['', [ ]],
+  },{ validators: this.passwordMatchValidator('password', 'confirmPassword') });
+  
 
   constructor(private fb: FormBuilder, private router: Router,private registerService: RegisterService) { }
 
@@ -72,6 +74,15 @@ export class RegisterComponent {
     };
   }
 
+
+
+   passwordMatchValidator(passwordControlName: string, confirmPasswordControlName: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const password = control.get(passwordControlName)?.value;
+      const confirmPassword = control.get(confirmPasswordControlName)?.value;
+      return password === confirmPassword ? null : { mismatch: true };
+    };
+  }
 
 
   toLoginPage() {

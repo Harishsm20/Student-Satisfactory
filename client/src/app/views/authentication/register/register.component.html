@@ -62,6 +62,9 @@
                     <div *ngIf="confirmPassword?.errors?.['minlength']">Confirm Password must be at least 6 characters.</div>
                     <div *ngIf="password?.errors?.['pattern']">Password must contain at least one number and one special character.</div>
                   </div>
+                  <div *ngIf="registrationForm.errors?.['mismatch'] && (confirmPassword?.dirty || confirmPassword?.touched)">
+                    <div>Passwords do not match.</div>
+                  </div>
                 </c-col>
               </c-row>
 
@@ -72,7 +75,7 @@
                     <span cInputGroupText>
                       <svg cIcon name="cil-bookmark"></svg>
                     </span>
-                    <select class="form-control" [formControlName]="'department'"> <!-- Add 'form-control' class here -->
+                    <select class="form-control" [formControlName]="'department'"> 
                       <option value="" disabled selected style="color: rgba(0,0,0,0.5);">Select Department</option>
                       <option value="department1">Department 1</option>
                       <option value="department2">Department 2</option>
