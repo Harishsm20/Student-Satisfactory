@@ -1,46 +1,97 @@
 const express = require('express');
 const User = require('../models/users.js');
 const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 const secretKey = require('crypto').randomBytes(32).toString('hex'); 
 const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
+// router.post('/login', async (req, res) => {
+//   let role = '';
+//   console.log("Login body:", req.body);
+//   const { email, password } = req.body;
+//   User.findOne({ email: email })
+//     .then(user => {
+//       console.log(user);
+//       if (user) {
+//         if (user.password === password) {
+//           role = user.role;
+//           console.log(`Login Success : ${role}`);
+//           const token = jwt.sign({ userId: user._id, role: user.role, rollNo: user.RollNo, batch: user.batch, name: user.username, email: user.email, department: user.department }, secretKey, { expiresIn: '1h' }); 
+//           console.log(token);
+//           return res.json({
+//             success: true,
+//             role: role, 
+//             message: 'Authentication successful',
+//             token, 
+//           }); 
+//         } else {
+//           res.json({
+//             success: false,
+//             message: 'Password is incorrect'
+//           });
+//           console.log("Login Failed: Password is incorrect");
+//         }
+//       } else {
+//         res.json({
+//           success: false,
+//           message: 'Record not found'
+//         });
+//         console.log("Login Failed: No record");
+//       }
+//     });
+// });
 router.post('/login', async (req, res) => {
-  let role = '';
   console.log("Login body:", req.body);
   const { email, password } = req.body;
-  User.findOne({ email: email })
-    .then(user => {
-      console.log(user);
-      if (user) {
-        if (user.password === password) {
-          role = user.role;
-          console.log(`Login Success : ${role}`);
-          const token = jwt.sign({ userId: user._id, role: user.role, rollNo: user.RollNo, batch: user.batch, name: user.username, email: user.email, department: user.department }, secretKey, { expiresIn: '1h' }); 
-          console.log(token);
-          return res.json({
-            success: true,
-            role: role, 
-            message: 'Authentication successful',
-            token, 
-          }); 
-        } else {
-          res.json({
-            success: false,
-            message: 'Password is incorrect'
-          });
-          console.log("Login Failed: Password is incorrect");
-        }
+
+  try {
+    const user = await User.findOne({ email: email });
+
+    if (user) {
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
+      if (passwordMatch || user.password === password) {
+        const token = jwt.sign({ 
+          userId: user._id, 
+          role: user.role, 
+          rollNo: user.RollNo, 
+          batch: user.batch, 
+          name: user.username, 
+          email: user.email, 
+          department: user.department 
+        }, secretKey, { expiresIn: '1h' }); 
+
+        console.log(`Login Success : ${user.role}`);
+        console.log(token);
+
+        return res.json({
+          success: true,
+          role: user.role, 
+          message: 'Authentication successful',
+          token, 
+        }); 
       } else {
         res.json({
           success: false,
-          message: 'Record not found'
+          message: 'Password is incorrect'
         });
-        console.log("Login Failed: No record");
+        console.log("Login Failed: Password is incorrect");
       }
-    });
+    } else {
+      res.json({
+        success: false,
+        message: 'Record not found'
+      });
+      console.log("Login Failed: No record");
+    }
+  } catch (err) {
+    console.error("Error during login:", err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
+
 
 router.post('/register', async (req, res) => {
   console.log("Received request body:", req.body);
@@ -60,10 +111,11 @@ router.post('/register', async (req, res) => {
   }
 
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       username,
       email,
-      password,
+      password : hashedPassword,
       role,
       department,
       RollNo,
