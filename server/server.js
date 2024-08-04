@@ -11,8 +11,6 @@ const responseController = require('./controllers/responseController');
 const profileController = require('./controllers/profileController');
 const dotenv = require('dotenv');
 
-
-
 const PORT = 3001;
 dotenv.config();
 
