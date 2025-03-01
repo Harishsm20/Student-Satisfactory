@@ -30,6 +30,7 @@ interface Question {
 export class CreateSurveyComponent implements OnInit {
   userRole: string = '';
   faculty: string ='';
+  batchEmail: string = '';
   surveyForm: FormGroup = new FormGroup({});
   questionsB: Question[] = []; 
   selectedQuestionIds: string[] = [];
@@ -66,6 +67,23 @@ export class CreateSurveyComponent implements OnInit {
     });
   }
 
+
+  getBatchEmail(batch: string): string {
+    if (batch === '2022') {
+      return '20222026batch@bitsathy.ac.in';
+    } else if (batch === '2023') {
+      return '20232027batch@bitsathy.ac.in';
+    } else if(batch == '2024'){
+      return '20242028batch@bitsathy.ac.in'
+    } 
+    else if(batch == '2021'){
+      return '20212025batch@bitsathy.ac.in'
+    } 
+    else {
+      return ''; 
+    }
+  }
+
   fetchAvailableQuestions() {
     this.surveyService.getQuestions().subscribe(questions => {
       this.questionsB = questions.map(question => ({
@@ -85,6 +103,7 @@ export class CreateSurveyComponent implements OnInit {
         questions: this.selectedQuestionIds
       };
 
+      this.batchEmail = this.getBatchEmail(formValue.batch); 
       this.surveyService.createSurvey(surveyData).subscribe(response => {
         console.log('Survey created successfully!', response);
         this.showAlert('Survey created successfully!', true);

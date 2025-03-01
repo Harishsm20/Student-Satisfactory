@@ -65,7 +65,10 @@
         </label>
       </div>
     </div>
-    
+    <a *ngIf="batchEmail" [href]="'https://mail.google.com/mail/?view=cm&fs=1&to=' + batchEmail + '&su=Survey%20Reminder&body=Please%20complete%20the%20survey.'"
+    target="_blank">
+   Send Email
+ </a>
     
   </div>
   
